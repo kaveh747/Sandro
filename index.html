@@ -163,7 +163,7 @@ function startGPS(){if(!navigator.geolocation){gpsState='err';return}
   if(c.accuracy<=30){const l=trail[trail.length-1];const d=l?hav(l,pos):0;
    if(!l||d>3){if(trip.run&&l&&d<200&&(now()-l.t)<10000)trip.d+=d;trail.push(pos);if(trail.length>1500)trail.shift()}}
  },e=>{gpsState=e.code===1?'err':'wait';gpsErr=e.code===1?(window.top!==window.self?'GPS blocked: page is embedded. Host it on your own HTTPS':'GPS denied: allow Location for Safari'):(e.code===2?'GPS unavailable':'GPS timeout, retrying')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000})}
-$('#conn').onclick=startGPS;
+$('#conn').onclick=startGPS;setInterval(()=>{if(gpsState==='ok'&&navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>{if(pos&&p.coords.accuracy<100){pos.t=now();pos.acc=p.coords.accuracy}},()=>{},{maximumAge:3000,timeout:8000})},4000);
 $('#recenter').onclick=()=>{off={x:0,y:0}};$('#zin').onclick=()=>{Z=Math.min(18,Z+1)};$('#zout').onclick=()=>{Z=Math.max(12,Z-1)};
 function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b.lat-a.lat)*r,dn=(b.lon-a.lon)*r,x=Math.sin(dl/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 // ---- map (own canvas; OSM tiles when the host allows image loading) ----
@@ -176,7 +176,7 @@ let drag=null;
 cv.onpointerdown=e=>{drag={x:e.clientX-off.x,y:e.clientY-off.y};cv.setPointerCapture(e.pointerId)};
 cv.onpointermove=e=>{if(drag)off={x:e.clientX-drag.x,y:e.clientY-drag.y}};cv.onpointerup=()=>drag=null;
 function drawMap(){const w=cv.clientWidth,h=cv.clientHeight;cx.fillStyle='#0c0f14';cx.fillRect(0,0,w,h);
- if(!pos||now()-pos.t>8000){cx.fillStyle='#666';cx.font='14px sans-serif';cx.textAlign='center';cx.fillText(pos?'GPS signal lost':'No position',w/2,h/2);return}
+ if(!pos||now()-pos.t>30000){cx.fillStyle='#666';cx.font='14px sans-serif';cx.textAlign='center';cx.fillText(pos?'GPS signal lost':'No position',w/2,h/2);return}
  const c=px(pos.lat,pos.lon);cx.save();cx.translate(w/2+off.x,h/2+off.y);
  if(heading!=null)cx.rotate(-heading*Math.PI/180);
  const R=Math.hypot(w,h)/2+300,x0=Math.floor((c.x-R)/256),x1=Math.floor((c.x+R)/256),y0=Math.floor((c.y-R)/256),y1=Math.floor((c.y+R)/256);
@@ -191,7 +191,7 @@ $('#treset').onclick=()=>{trip.d=trip.tot=trip.mov=0;trip.run=false;$('#tpause')
 setInterval(()=>{if(trip.run){trip.tot++;if(gspeed!=null&&gspeed>3)trip.mov++}},1000);
 // ---- render ----
 function render(){
- const gOk=pos&&now()-pos.t<STALE&&gpsState==='ok',sp=gOk&&gspeed!=null?Math.round(gspeed):null;
+ const age=pos?now()-pos.t:1e9,gOk=pos&&age<20000&&gpsState==='ok',sp=gOk&&gspeed!=null&&(age<5000||gspeed<1)?Math.round(gspeed):null;
  setV('#spd',sp);
  const g=$('#gpsmsg');g.textContent={off:'GPS: not connected',wait:gpsErr||'GPS: waiting…',ok:gOk?'GPS ±'+Math.round(pos.acc)+' m':'GPS: signal lost',err:gpsErr||'GPS error'}[gpsState];
  g.className={off:'val',wait:'wait',ok:gOk?'ok':'wait',err:'err'}[gpsState];
