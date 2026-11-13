@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sandero Smart Cockpit</title>
+<style>
+:root{--bg:#050505;--card:#141414;--line:#262626;--tx:#fff;--mut:#8a8a8a;--blue:#2f8cff;--amb:#f5a524;--red:#ef4444;box-sizing:border-box;padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;overflow:hidden}
+body{position:relative}
+.page{position:absolute;inset:0;display:none;padding:8px 10px}.page.on{display:flex;flex-direction:column}
+.dim{position:fixed;inset:0;background:#000;pointer-events:none;z-index:50;opacity:0}
+button{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.val{color:var(--mut)}.ok{color:var(--blue)}.wait{color:var(--amb)}.err{color:var(--red)}
+.lbl{font-size:11px;letter-spacing:.12em;color:var(--mut)}
+/* dashboard */
+#dash .main{flex:1;display:grid;grid-template-columns:27% 1fr 20%;gap:8px;min-height:0}
+.col{display:flex;flex-direction:column;gap:8px;min-height:0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px}
+#spd{font-size:min(22vh,24vw);font-weight:200;line-height:1;margin-top:6px}
+#dash .spdbox{flex:1;display:flex;flex-direction:column;justify-content:center}
+.unit{font-size:14px;color:var(--mut)}
+.rpmbar{position:relative;height:16px;background:#1d1d1d;border-radius:8px;margin:8px 0 2px;overflow:hidden}
+#rpmfill{position:absolute;inset:0 auto 0 0;width:0;background:var(--blue)}
+.ticks{display:flex;justify-content:space-between;font-size:10px;color:var(--mut)}
+.mapbox{position:relative;padding:0;overflow:hidden}
+#map{width:100%;height:100%;display:block;touch-action:none}
+.mbtn{position:absolute;padding:8px 12px;font-size:12px;background:#000c}
+#gpsmsg{position:absolute;left:10px;top:10px;font-size:12px;background:#000c;padding:6px 10px;border-radius:10px}
+.big{font-size:min(10vh,7vw);font-weight:300}
+.bar{display:flex;gap:8px;align-items:stretch}
+.bar .box{flex:1;padding:6px 10px;display:flex;justify-content:space-between;align-items:center}
+.nav{display:flex;gap:8px}.nav button{padding:8px 12px;font-size:12px;letter-spacing:.08em}
+/* tesla dash */
+#dash{padding:0}
+.td{flex:1;display:grid;grid-template-columns:38% 1fr;gap:10px;min-height:0;padding:6px 8px 0}
+.tl{display:flex;flex-direction:column;min-height:0}
+.prnd{display:flex;justify-content:center;align-items:baseline;gap:20px;font-size:12px;color:#555;letter-spacing:.1em}
+.prnd span.on{color:#fff;font-weight:700}.prnd #gear{font-size:11px;margin-left:8px}
+.spdwrap{text-align:center;background:radial-gradient(ellipse at 50% 45%,#0b2a55 0%,transparent 70%);padding:2px 0}
+.spdwrap #spd{font-size:min(19vh,15vw);font-weight:500;margin:0}
+.road{flex:1;min-height:0}.road svg{width:100%;height:100%}
+.low{display:flex;gap:14px;padding:0 6px 2px;align-items:flex-end}.low>div{flex:1}.low .rpmbar{height:10px;margin:4px 0 1px}
+.low b{font-weight:400;font-size:16px}
+.dots{display:flex;justify-content:center;gap:10px;padding:4px}.dots i{width:6px;height:6px;border-radius:50%;background:#444}.dots i.on{background:#fff}
+.tmap{position:relative;border-radius:14px;overflow:hidden;background:#0c0f14}
+#gpsmsg{background:#151a22ee;border-radius:10px;padding:8px 12px}
+.fc{position:absolute;right:8px;width:38px;height:38px;border-radius:50%;background:#1a1a1cdd;border:1px solid var(--line);display:grid;place-items:center;font-size:18px;padding:0}
+.tb{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex:none}
+.tb .tv{font-size:15px;text-align:center;min-width:64px}.tb .tv .lbl{display:block;font-size:9px}
+.tb .ic{display:flex;gap:6px;align-items:center}.tb .ic button,.tb .ic a{width:42px;height:36px;border:0;background:none;color:#aaa;font-size:20px;text-decoration:none;display:grid;place-items:center;border-radius:10px}
+.tb .ic .cur{color:var(--blue)}
+/* tesla v2 */
+.tl{position:relative}#clk{position:absolute;left:4px;top:0;font-size:13px;color:#cfcfcf}
+.spdwrap #spd{font-size:min(22vh,16vw)}
+.rp{padding:0 14px 2px}.rp .rpmbar{height:12px;margin:4px 0 1px}
+.ban{position:absolute;left:8px;top:8px;display:flex;gap:8px;align-items:center;background:#151a22ee;border-radius:10px;padding:6px 8px;font-size:12px}
+.ban #conn{position:static;padding:5px 10px}#gpsmsg{position:static!important;background:none;padding:0}
+.card{position:absolute;left:8px;bottom:8px;background:#14171add;border-radius:10px;padding:8px 12px;font-size:12px;min-width:150px}
+.card b{font-weight:400;font-size:17px}.card .r{display:flex;justify-content:space-between;gap:14px;color:var(--mut)}
+/* launcher */
+.stat{display:flex;justify-content:space-around;padding:6px 0 10px}
+.stat div{text-align:center;font-size:10px;color:var(--mut)}.stat b{display:block;font-size:20px;font-weight:400}
+.grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:0;overflow:auto;align-content:start}
+.grid button{padding:10px 4px;font-size:10px;letter-spacing:.08em;display:flex;flex-direction:column;align-items:center;gap:2px;height:min(15vh,64px);justify-content:center}
+.grid button b{font-size:20px;font-weight:400}
+.smart{margin-top:8px;padding:12px;border:1px solid var(--blue);border-radius:14px;display:flex;justify-content:space-between;align-items:center;width:100%;background:#0a1a2e;opacity:.55;filter:grayscale(.7)}
+.toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#222;padding:10px 16px;border-radius:12px;font-size:13px;z-index:60;display:none;max-width:90%}
+/* status */
+#stat .g{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:0;overflow:auto}
+.g .box b{display:block;font-size:min(9vh,6vw);font-weight:300;margin-top:4px}
+.trip{grid-column:1/-1;font-size:13px}.trip .r{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0}.trip .r b{font-size:20px;font-weight:300;display:block}
+.trip button{padding:8px 12px;margin-right:6px}.trip input{width:80px;background:#000;color:#fff;border:1px solid var(--line);border-radius:8px;padding:6px}
+@media (orientation:portrait){#dash .main{grid-template-columns:1fr}.grid{grid-template-columns:repeat(3,1fr)}#stat .g{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+
+<section class="page on" id="dash">
+ <div class="td">
+  <div class="tl"><span id="clk">--:--</span>
+   <div class="prnd"><span id="gP">P</span><span id="gR">R</span><span id="gN">N</span><span id="gD">D</span><span id="gear" class="val">--</span></div>
+   <div class="spdwrap"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
+   <div class="rp"><div style="display:flex;justify-content:space-between"><span class="lbl">RPM</span><span id="rpm" class="val">--</span></div>
+    <div class="rpmbar"><div id="rpmfill"></div></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+   <div class="road"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMax meet">
+    <defs><linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8d8dc"/><stop offset="1" stop-color="#6d6d72"/></linearGradient><radialGradient id="ch"><stop offset="0" stop-color="#3b6fb8" stop-opacity=".5"/><stop offset="1" stop-color="#3b6fb8" stop-opacity="0"/></radialGradient></defs>
+    <g stroke="#555" stroke-width="2" fill="none"><path d="M10 200 L110 0"/><path d="M290 200 L190 0"/></g>
+    <g stroke="#2f6fe0" stroke-width="3" fill="none"><path d="M78 200 L128 0"/><path d="M222 200 L172 0"/></g>
+    <ellipse cx="150" cy="150" rx="95" ry="34" fill="url(#ch)"/>
+    <rect x="110" y="108" width="80" height="86" rx="22" fill="url(#cb)"/><rect x="120" y="115" width="60" height="28" rx="12" fill="#222"/>
+    <rect x="114" y="152" width="22" height="8" rx="3" fill="#e5322d"/><rect x="164" y="152" width="22" height="8" rx="3" fill="#e5322d"/></svg></div>
+   <div class="dots"><i class="on"></i><i data-go="launch"></i><i data-go="stat"></i></div>
+  </div>
+  <div class="tmap"><canvas id="map"></canvas>
+   <div class="ban"><span id="gpsmsg" class="val">GPS: not connected</span><button class="mbtn" id="conn">Connect GPS</button></div>
+   <div class="card"><span class="lbl">TRIP</span><div class="r"><b id="d_km" class="val">--</b><b id="d_t" class="val">--</b></div></div>
+   <button class="fc" id="zin" style="top:8px">+</button><button class="fc" id="zout" style="top:52px">&minus;</button><button class="fc" id="recenter" style="top:100px">&#10148;</button></div>
+ </div>
+ <div class="tb">
+  <div style="display:flex;gap:6px"><div class="tv"><span class="lbl">COOLANT</span><span><span id="cool" class="val">--</span> &deg;C</span></div>
+  <div class="tv"><span class="lbl">OIL</span><span><span id="oil" class="val">--</span> &deg;C</span></div></div>
+  <div class="ic"><button class="cur">&#9673;</button><button data-go="stat">&#9635;</button><button data-go="launch">&#9638;</button><a href="https://maps.apple.com/">&#10148;</a><a href="music://">&#9835;</a><a href="tel:">&#9990;</a></div>
+  <div style="display:flex;gap:6px"><div class="tv"><span class="lbl">BATTERY</span><span><span id="bat" class="val">--</span> V</span></div>
+  <div class="tv"><span class="lbl">FUEL</span><span id="fuel" class="val">--</span></div></div>
+ </div>
+</section>
+
+<section class="page" id="launch">
+ <div class="stat" id="sbar"></div>
+ <div class="grid" id="apps"></div>
+ <button class="smart" id="smart"><span><b>⚙ SMART CONTROL</b><br><span class="lbl">ESP32 CONNECTION &amp; CONTROL</span></span><span class="val">-- not connected</span></button>
+</section>
+
+<section class="page" id="stat">
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>VEHICLE STATUS</b><button data-go="dash" style="padding:8px 14px">◀ DASHBOARD</button></div>
+ <div class="g">
+  <div class="box"><span class="lbl">ENGINE COOLANT</span><b><span id="s_cool" class="val">--</span> °C</b></div>
+  <div class="box"><span class="lbl">ENGINE OIL</span><b><span id="s_oil" class="val">--</span> °C</b></div>
+  <div class="box"><span class="lbl">BATTERY</span><b><span id="s_bat" class="val">--</span> V</b></div>
+  <div class="box"><span class="lbl">FUEL LEVEL</span><b><span id="s_fuel" class="val">--</span> %</b></div>
+  <div class="box trip"><span class="lbl">TRIP INFORMATION</span>
+   <div class="r"><div>Distance<b id="t_d">--</b></div><div>Total time<b id="t_t">--</b></div><div>Moving time<b id="t_m">--</b></div>
+    <div>Avg speed (total)<b id="t_a">--</b></div><div>Avg speed (moving)<b id="t_am">--</b></div><div>Fuel used<b class="val">--</b></div>
+    <div>Avg consumption<b class="val">--</b></div><div>Fuel cost<b class="val">--</b></div><div>Price / L <input id="price" type="number" placeholder="user set"></div></div>
+   <button id="tstart">START TRIP</button><button id="tpause">PAUSE</button><button id="treset">RESET TRIP</button></div>
+ </div>
+</section>
+<div class="toast" id="toast"></div><div class="dim" id="dim"></div>
+
+<script>
+// ---- data layer: every value carries value/unit/source/time/validity ----
+const STALE=4000, now=()=>Date.now();
+const store={};
+['rpm','cool','oil','bat','gear','fuel'].forEach(k=>store[k]={v:null,t:0,src:'OBD2'});
+window.Cockpit={push(k,v){if(store[k])store[k]={v,t:now(),src:'OBD2'}}}; // future OBD2 service calls Cockpit.push('rpm',2100)
+const live=k=>{const s=store[k];return s.v!=null&&now()-s.t<STALE?s.v:null};
+const $=s=>document.querySelector(s);
+function setV(id,v,fmt){const e=$(id);e.textContent=v==null?'--':(fmt?fmt(v):v);e.className=v==null?'val':'ok'}
+// ---- pages ----
+function go(p){document.querySelectorAll('.page').forEach(e=>e.classList.toggle('on',e.id===p));requestAnimationFrame(sizeMap)}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',3500)}
+// ---- launcher ----
+const apps=[['NAVIGATION','➤','https://maps.apple.com/'],['MUSIC','♫','music://'],['PHONE','✆','tel:'],['CONTACTS','☺','contacts://'],['DASHBOARD','◉','#dash'],['CAMERA','◎','#cam'],['RADIO','≋',null],['FILES','▤','shareddocuments://'],['CALENDAR','▦','calshow://'],['SETTINGS','⚙',null],['GOOGLE SEARCH','⌕','https://www.google.com/'],['WEATHER','☁','weather://'],['VEHICLE STATUS','▣','#stat']];
+$('#apps').innerHTML=apps.map((a,i)=>`<button data-i="${i}"><b>${a[1]}</b>${a[0]}</button>`).join('');
+$('#apps').onclick=e=>{const b=e.target.closest('button');if(!b)return;const [n,,u]=apps[b.dataset.i];
+ if(u==='#dash')return go('dash');if(u==='#stat')return go('stat');
+ if(u==='#cam'){return toast('Camera: iOS web apps cannot open the Camera app directly. Open it from the Home Screen.')}
+ if(!u)return toast(n+': iOS has no public link to open this from a web app.');
+ let hid=false;const h=()=>hid=document.hidden;document.addEventListener('visibilitychange',h,{once:true});
+ location.href=u;setTimeout(()=>{if(!hid&&!document.hidden)toast(n+': iOS did not open the app (blocked or not installed).')},1500)};
+$('#smart').onclick=()=>toast('ESP32 not connected. Control features will appear here once a verified connection exists.');
+// status bar: gray = unknown unless truly verified
+const sb=[['Bluetooth','ᛒ'],['Wi-Fi','◠'],['Signal','▂▄▆'],['Mobile Data','⇅'],['Brightness','☀'],['Battery','▭'],['GPS','⌖']];
+$('#sbar').innerHTML=sb.map((s,i)=>`<div><b id="sb${i}" class="val">${s[1]}</b>${s[0]}</div>`).join('');
+function sbSet(i,c){$('#sb'+i).className=c}
+$('#sb4').parentElement.onclick=()=>{const v=prompt('In-app brightness 20-100',Math.round((1-$('#dim').style.opacity)*100)||100);if(v){const n=Math.min(100,Math.max(20,+v));$('#dim').style.opacity=1-n/100;sbSet(4,'ok')}};
+// ---- GPS ----
+let gpsErr='',pos=null,heading=null,gspeed=null,gpsState='off',watch=null,trail=[],off={x:0,y:0},trip={run:false,d:0,tot:0,mov:0,last:null};
+function startGPS(){if(!navigator.geolocation){gpsState='err';return}
+ gpsState='wait';if(watch!=null)navigator.geolocation.clearWatch(watch);
+ watch=navigator.geolocation.watchPosition(p=>{const c=p.coords;gpsState='ok';
+  pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,t:now()};
+  gspeed=c.speed!=null&&c.speed>=0?c.speed*3.6:null;heading=(c.heading!=null&&!isNaN(c.heading)&&(c.speed||0)>1.5)?c.heading:heading;
+  if(c.accuracy<=30){const l=trail[trail.length-1];const d=l?hav(l,pos):0;
+   if(!l||d>3){if(trip.run&&l&&d<200&&(now()-l.t)<10000)trip.d+=d;trail.push(pos);if(trail.length>1500)trail.shift()}}
+ },e=>{gpsState=e.code===1?'err':'wait';gpsErr=e.code===1?(window.top!==window.self?'GPS blocked: page is embedded. Host it on your own HTTPS':'GPS denied: allow Location for Safari'):(e.code===2?'GPS unavailable':'GPS timeout, retrying')},{enableHighAccuracy:true,maximumAge:1000,timeout:15000})}
+$('#conn').onclick=startGPS;
+$('#recenter').onclick=()=>{off={x:0,y:0}};$('#zin').onclick=()=>{Z=Math.min(18,Z+1)};$('#zout').onclick=()=>{Z=Math.max(12,Z-1)};
+function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b.lat-a.lat)*r,dn=(b.lon-a.lon)*r,x=Math.sin(dl/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+// ---- map (own canvas; OSM tiles when the host allows image loading) ----
+const cv=$('#map'),cx=cv.getContext('2d'),tiles={};let Z=16;
+function sizeMap(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',sizeMap);sizeMap();
+const px=(lat,lon)=>{const s=256*2**Z,r=Math.PI/180;return{x:(lon+180)/360*s,y:(1-Math.log(Math.tan(lat*r)+1/Math.cos(lat*r))/Math.PI)/2*s}};
+function tile(x,y){const k=Z+'/'+x+'/'+y;if(!tiles[k]){const i=new Image();i.onload=()=>i.ok=true;i.onerror=()=>i.bad=true;i.src=`https://tile.openstreetmap.org/${Z}/${x}/${y}.png`;tiles[k]=i}return tiles[k]}
+let drag=null;
+cv.onpointerdown=e=>{drag={x:e.clientX-off.x,y:e.clientY-off.y};cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(drag)off={x:e.clientX-drag.x,y:e.clientY-drag.y}};cv.onpointerup=()=>drag=null;
+function drawMap(){const w=cv.clientWidth,h=cv.clientHeight;cx.fillStyle='#0c0f14';cx.fillRect(0,0,w,h);
+ if(!pos||now()-pos.t>8000){cx.fillStyle='#666';cx.font='14px sans-serif';cx.textAlign='center';cx.fillText(pos?'GPS signal lost':'No position',w/2,h/2);return}
+ const c=px(pos.lat,pos.lon);cx.save();cx.translate(w/2+off.x,h/2+off.y);
+ if(heading!=null)cx.rotate(-heading*Math.PI/180);
+ const R=Math.hypot(w,h)/2+300,x0=Math.floor((c.x-R)/256),x1=Math.floor((c.x+R)/256),y0=Math.floor((c.y-R)/256),y1=Math.floor((c.y+R)/256);
+ cx.strokeStyle='#1b222c';for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const X=x*256-c.x,Y=y*256-c.y;
+  const im=(x1-x0<12)?tile(x,y):null;if(im&&im.ok){cx.globalAlpha=.55;cx.drawImage(im,X,Y,256,256);cx.globalAlpha=1}else cx.strokeRect(X,Y,256,256)}
+ cx.strokeStyle='#2f8cff';cx.lineWidth=4;cx.beginPath();trail.forEach((p,i)=>{const q=px(p.lat,p.lon);i?cx.lineTo(q.x-c.x,q.y-c.y):cx.moveTo(q.x-c.x,q.y-c.y)});cx.stroke();cx.restore();
+ cx.save();cx.translate(w/2,h/2);if(heading==null||off.x||off.y){}cx.fillStyle='#fff';cx.beginPath();cx.moveTo(0,-14);cx.lineTo(10,12);cx.lineTo(0,7);cx.lineTo(-10,12);cx.closePath();cx.fill();cx.restore()}
+// ---- trip ----
+const fmtT=s=>{s|=0;return[s/3600|0,(s/60|0)%60,s%60].map(n=>String(n).padStart(2,'0')).join(':')};
+$('#tstart').onclick=()=>{trip.run=true;trip.last=null};$('#tpause').onclick=()=>{trip.run=!trip.run;$('#tpause').textContent=trip.run?'PAUSE':'RESUME'};
+$('#treset').onclick=()=>{trip.d=trip.tot=trip.mov=0;trip.run=false;$('#tpause').textContent='PAUSE'};
+setInterval(()=>{if(trip.run){trip.tot++;if(gspeed!=null&&gspeed>3)trip.mov++}},1000);
+// ---- render ----
+function render(){
+ const gOk=pos&&now()-pos.t<STALE&&gpsState==='ok',sp=gOk&&gspeed!=null?Math.round(gspeed):null;
+ setV('#spd',sp);
+ const g=$('#gpsmsg');g.textContent={off:'GPS: not connected',wait:gpsErr||'GPS: waiting…',ok:gOk?'GPS ±'+Math.round(pos.acc)+' m':'GPS: signal lost',err:gpsErr||'GPS error'}[gpsState];
+ g.className={off:'val',wait:'wait',ok:gOk?'ok':'wait',err:'err'}[gpsState];
+ sbSet(6,{off:'val',wait:'wait',ok:gOk?'ok':'wait',err:'err'}[gpsState]);
+ const r=live('rpm');setV('#rpm',r);$('#rpmfill').style.width=r==null?0:Math.min(100,r/7000*100)+'%';
+ {const gv=live('gear');['P','R','N','D'].forEach(l=>$('#g'+l).classList.toggle('on',gv!=null&&String(gv).toUpperCase()===l));$('#gear').textContent=gv==null?'--':(/^\d$/.test(gv)?'D'+gv:'');$('#gear').className=gv==null?'val':'ok'}setV('#fuel',live('fuel'),v=>v+'%');
+ setV('#cool',live('cool'));setV('#oil',live('oil'));setV('#bat',live('bat'));
+ setV('#s_cool',live('cool'));setV('#s_oil',live('oil'));setV('#s_bat',live('bat'));setV('#s_fuel',live('fuel'));
+ const km=trip.d/1000;$('#t_d').textContent=trip.tot||trip.d?km.toFixed(2)+' km':'--';
+ $('#t_t').textContent=trip.tot?fmtT(trip.tot):'--';$('#t_m').textContent=trip.tot?fmtT(trip.mov):'--';
+ $('#t_a').textContent=trip.tot>5?(km/(trip.tot/3600)).toFixed(1)+' km/h':'--';
+ $('#t_am').textContent=trip.mov>5?(km/(trip.mov/3600)).toFixed(1)+' km/h':'--';
+ $('#clk').textContent=new Date().toTimeString().slice(0,5);$('#d_km').textContent=trip.d?(trip.d/1000).toFixed(1)+' km':'--';$('#d_t').textContent=trip.tot?fmtT(trip.tot):'--';
+ drawMap()}
+setInterval(render,300);render();
+</script></body></html>
