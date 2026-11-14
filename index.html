@@ -52,6 +52,17 @@ button{font:inherit;color:inherit;background:none;border:0}
 .cd{background:#14181d;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .cd svg{width:min(14vh,56px);height:min(14vh,56px)}.cd b{font-size:min(11vh,8vw);font-weight:300}.cd small{font-size:11px;color:var(--mut)}
 @media (orientation:portrait){.td{grid-template-columns:1fr}.grid{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:1fr}}
+/* v5 compact sizing for iPhone 13 landscape */
+#top{height:22px;gap:8px;top:env(safe-area-inset-top,0px)}#sbar{gap:0}#sbar button{padding:1px 4px}#sbar svg{width:15px;height:15px}#clk,#tmp{font-size:12px}
+.page{top:calc(env(safe-area-inset-top,0px) + 22px);padding:4px 8px}
+.td{grid-template-columns:36% 1fr;gap:8px}
+.spdwrap{margin-top:2px;padding:0}.spdwrap #spd{font-size:min(21vh,12.5vw);line-height:1}.unit{font-size:12px}
+.rp{padding:0 6px}.lbl{font-size:10px}.rpmbar{height:8px;margin:4px 0 2px}.ticks{font-size:9px}
+.vbtn{align-self:center;display:grid;place-items:center;width:44px;height:32px;padding:0;border-radius:11px;font-size:0;background:#14181d}.vbtn svg{width:20px;height:20px}
+.dots{padding:2px 0 0}.dots i{width:6px;height:6px}
+.ban{font-size:11px;padding:4px 7px}.ban button{padding:4px 8px;font-size:11px}
+.fc{width:32px;height:32px;font-size:16px}#zin{top:8px!important}#zout{top:46px!important}#recenter{top:84px!important}
+.hd2 button{padding:5px 12px;font-size:11px}.grid button{height:66px}.chip{width:32px;height:32px}
 </style></head><body>
 
 <div id="top"><div id="sbar"></div><span style="flex:1"></span><span id="tmp"></span><span id="clk">--:--</span></div>
