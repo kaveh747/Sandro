@@ -63,21 +63,62 @@ button{font:inherit;color:inherit;background:none;border:0}
 .ban{font-size:11px;padding:4px 7px}.ban button{padding:4px 8px;font-size:11px}
 .fc{width:32px;height:32px;font-size:16px}#zin{top:8px!important}#zout{top:46px!important}#recenter{top:84px!important}
 .hd2 button{padding:5px 12px;font-size:11px}.grid button{height:66px}.chip{width:32px;height:32px}
+/* v6 tesla composition + iOS-style icons */
+#top{height:18px;gap:6px}#sbar svg{width:12px;height:12px}#sbar button{padding:0 3px}#clk,#tmp{font-size:11px}
+.page{top:calc(env(safe-area-inset-top,0px) + 18px)}
+.td{grid-template-columns:38% 1fr}
+.prnd{gap:16px;font-size:11px;color:#555}.prnd span.on{color:#fff;font-weight:700}.prnd #gear{font-size:10px;margin-left:6px}
+.spdwrap #spd{font-size:min(19vh,11.5vw)}.road{flex:1;min-height:0}
+.tb2{display:flex;justify-content:center;align-items:center;gap:clamp(10px,4.5vw,40px);height:42px;flex:none}
+.tb2 button{width:46px;height:38px;display:grid;place-items:center;border-radius:12px;color:#9aa3ae}.tb2 button:active{background:#1b2027}.tb2 button svg{width:22px;height:22px}
+.tb2 button.cur{color:var(--blue)}.tb2 button.st-wait{color:var(--amb)}.tb2 button.st-ok{color:var(--grn)}
+.grid{gap:10px 8px}.grid button{height:auto;padding:9px 2px 7px;border-radius:16px;background:#161b22;gap:6px;font-weight:500;color:#e6e9ee;transition:transform .08s}.grid button:active{transform:scale(.95)}
+.chip{width:46px;height:46px;border-radius:22.4%;position:relative;box-shadow:0 3px 10px #0008,inset 0 1px 0 #ffffff55}
+.chip::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,#ffffff33,transparent 55%)}
+.chip svg{width:25px;height:25px;position:relative;z-index:1;filter:drop-shadow(0 1px 1px #0005)}
+/* v7 polish + brand icons */
+.chip.k-ig{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%)}
+.chip.k-gm{background:#fff}.chip.k-gm svg{color:#ea4335;stroke-width:2.6;filter:none}
+.chip.k-yt svg{stroke-width:1.6}
+#launch{background:radial-gradient(ellipse at 50% -10%,#16294a 0%,#0b0e12 72%)}
+.grid button{background:#ffffff0e;border:1px solid #ffffff16;box-shadow:0 4px 14px #0006}
+.chip{width:48px;height:48px;box-shadow:0 4px 12px #0009,inset 0 1px 0 #ffffff66;box-shadow:0 6px 14px color-mix(in srgb,var(--c2) 50%,transparent),inset 0 1px 0 #ffffff66}
+.tl{background:linear-gradient(180deg,#0a0f18,#000 70%);border-radius:16px;padding:4px 4px 2px}
+.tmap{box-shadow:0 0 0 1px #ffffff14,0 8px 24px #0009}
+.page.on{animation:fi .18s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 </style></head><body>
 
 <div id="top"><div id="sbar"></div><span style="flex:1"></span><span id="tmp"></span><span id="clk">--:--</span></div>
-<section class="page on" id="dash"><div class="td">
- <div class="tl">
-  <div class="spdwrap"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
-  <div class="rp"><div style="display:flex;justify-content:space-between"><span class="lbl">RPM</span><span id="rpm" class="val">--</span></div>
-   <div class="rpmbar"><div id="rpmfill"></div></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
-  <button class="vbtn st-wait" id="vbtn" data-go="info"><span data-i="car"></span>VEHICLE STATUS</button>
-  <div class="dots"><i class="on" data-go="dash"></i><i data-go="launch"></i></div></div>
- <div class="tmap"><canvas id="map"></canvas>
-  <div class="ban" id="nvb" style="top:54px;display:none"><span id="nvt"></span><button id="nvx">&#10005;</button></div>
-  <div class="ban"><span id="gpsmsg" class="val">GPS: not connected</span><button id="conn">Connect GPS</button></div>
-  <button class="fc" id="zin" style="top:8px">+</button><button class="fc" id="zout" style="top:52px">&minus;</button><button class="fc" id="recenter" style="top:100px">&#10148;</button></div>
-</div></section>
+<section class="page on" id="dash">
+ <div class="td">
+  <div class="tl">
+   <div class="prnd"><span id="gP">P</span><span id="gR">R</span><span id="gN">N</span><span id="gD">D</span><span id="gear" class="val">--</span></div>
+   <div class="spdwrap"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
+   <div class="rp"><div style="display:flex;justify-content:space-between"><span class="lbl">RPM</span><span id="rpm" class="val">--</span></div>
+    <div class="rpmbar"><div id="rpmfill"></div></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+   <div class="road"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMax meet">
+    <defs><linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8d8dc"/><stop offset="1" stop-color="#6d6d72"/></linearGradient><radialGradient id="ch"><stop offset="0" stop-color="#3b6fb8" stop-opacity=".5"/><stop offset="1" stop-color="#3b6fb8" stop-opacity="0"/></radialGradient></defs>
+    <g stroke="#555" stroke-width="2" fill="none"><path d="M10 200 L110 0"/><path d="M290 200 L190 0"/></g>
+    <g stroke="#2f6fe0" stroke-width="3" fill="none"><path d="M78 200 L128 0"/><path d="M222 200 L172 0"/></g>
+    <ellipse cx="150" cy="150" rx="95" ry="34" fill="url(#ch)"/>
+    <rect x="110" y="108" width="80" height="86" rx="22" fill="url(#cb)"/><rect x="120" y="115" width="60" height="28" rx="12" fill="#222"/>
+    <rect x="114" y="152" width="22" height="8" rx="3" fill="#e5322d"/><rect x="164" y="152" width="22" height="8" rx="3" fill="#e5322d"/></svg></div>
+   <div class="dots"><i class="on" data-go="dash"></i><i data-go="launch"></i></div>
+  </div>
+  <div class="tmap"><canvas id="map"></canvas>
+   <div class="ban" id="nvb" style="top:44px;display:none"><span id="nvt"></span><button id="nvx">&#10005;</button></div>
+   <div class="ban"><span id="gpsmsg" class="val">GPS: not connected</span><button id="conn">Connect GPS</button></div>
+   <button class="fc" id="zin" style="top:8px">+</button><button class="fc" id="zout" style="top:52px">&minus;</button><button class="fc" id="recenter" style="top:100px">&#10148;</button></div>
+ </div>
+ <div class="tb2">
+  <button class="cur" data-act="dash" aria-label="Dashboard"><span data-i="gauge"></span></button>
+  <button class="st-wait" id="vbtn" data-go="info" aria-label="Vehicle status"><span data-i="car"></span></button>
+  <button data-go="launch" aria-label="Apps"><span data-i="grid"></span></button>
+  <button data-act="nav" aria-label="Navigation"><span data-i="map"></span></button>
+  <button data-act="music" aria-label="Music"><span data-i="music"></span></button>
+  <button data-act="phone" aria-label="Phone"><span data-i="phone"></span></button>
+ </div>
+</section>
 
 <section class="page" id="launch">
  <div class="hd2"><button data-go="dash">&#9664; DASHBOARD</button></div><div class="grid" id="apps"></div>
@@ -119,10 +160,11 @@ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.
 batt:'<rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/>',pin:'<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/>',
 therm:'<path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/>',oil:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5S12.5 5 12 2.5C11.5 5 10 7.400 8 9.500 6 11.100 5 13 5 15a7 7 0 0 0 7 7z"/>',
 bat:'<rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2M6 12h4M8 10v4"/>'};
+Object.assign(P,{ig:'<rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.5 6.5h.01"/>',gm:'<path d="M4 19V6.5L12 13l8-6.5V19"/>',yt:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',gauge:'<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'});
 const I=(k,s=26)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${P[k]}</svg>`;
 $$('[data-i]').forEach(e=>e.innerHTML=I(e.dataset.i,e.dataset.i==='car'?30:22));
 // data layer: value/time/validity; stale data is never shown as live
-const store={};['rpm','cool','oil','bat'].forEach(k=>store[k]={v:null,t:0});
+const store={};['rpm','cool','oil','bat','gear'].forEach(k=>store[k]={v:null,t:0});
 window.Cockpit={push(k,v){if(store[k])store[k]={v,t:now()}}};
 const live=k=>{const s=store[k];return s.v!=null&&now()-s.t<4000?s.v:null};
 function setV(id,v){const e=$(id);e.textContent=v==null?'--':v;e.className=v==null?'val':'ok'}
@@ -131,22 +173,23 @@ const cls=(e,s)=>{e.classList.remove('st-off','st-ok','st-wait','st-err','st-unk
 let cur='dash',prev='dash';
 function go(p){if(p==='back')p=prev;if(p==='info'&&cur!=='info')prev=cur;cur=p;$$('.page').forEach(e=>e.classList.toggle('on',e.id===p));requestAnimationFrame(sizeMap)}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)go(t.dataset.go)});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;if(a==='dash')go('dash');else if(a==='nav')openNav();else if(a==='phone')openDial();else if(a==='music'){let h=false;document.addEventListener('visibilitychange',()=>h=document.hidden,{once:true});location.href='vlc://';setTimeout(()=>{if(!h&&!document.hidden)toast('VLC did not open. Install VLC for Mobile from the App Store.')},1500)}});
 let sx=null;document.addEventListener('touchstart',e=>{sx=e.target.closest('canvas')?null:e.touches[0].clientX},{passive:true});
 document.addEventListener('touchend',e=>{if(sx==null)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>80){if(cur==='dash'&&d<0)go('launch');else if(cur==='launch'&&d>0)go('dash')}},{passive:true});
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',3500)}
 // launcher
 const apps=[['CONTACTS','users','#con'],['PHONE','phone','#dial'],['MUSIC (VLC)','music','vlc://'],['NAVIGATION','map','#nav'],
 ['FILES','folder','shareddocuments://'],['RADIO','radio','#rad'],['CAMERA','cam','#camv'],['OBD2','obd','#obd'],
-['WEATHER','cloud','#wx'],['GOOGLE SEARCH','search','https://www.google.com/'],['SETTINGS','gear','#set'],['CALENDAR','cal','calshow://'],['VEHICLE STATUS','car','#info']];
-const COL={users:['#ffb340','#ff8a00'],phone:['#4cd964','#1fa84a'],music:['#ff9a1f','#e66a00'],map:['#4aa3ff','#0a6cff'],folder:['#6ec1ff','#2f7de0'],radio:['#c77dff','#8e3fd1'],cam:['#a0a8b4','#6b7380'],obd:['#f5a524','#b8760a'],cloud:['#6fd3ff','#2f9bd6'],search:['#ff6b5e','#d92d20'],gear:['#a5adba','#6b7380'],cal:['#ff5e55','#d62d25'],car:['#f5a524','#b8760a']};
-$('#apps').innerHTML=apps.map((a,i)=>`<button data-a="${i}" ${a[2]==='#obd'?'id="obdtile" class="st-wait"':a[2]==='#info'?'id="vstile" class="st-wait"':''}><span class="chip" style="--c1:${COL[a[1]][0]};--c2:${COL[a[1]][1]}">${I(a[1],22)}</span>${a[0]}</button>`).join('');
+['WEATHER','cloud','#wx'],['GOOGLE SEARCH','search','https://www.google.com/'],['SETTINGS','gear','#set'],['CALENDAR','cal','calshow://'],['INSTAGRAM','ig','instagram://app'],['GMAIL','gm','googlegmail://'],['VIDEO','yt','youtube://'],['VEHICLE STATUS','car','#info']];
+const COL={ig:['#d6249f','#285aeb'],gm:['#ffffff','#eeeeee'],yt:['#ff3b30','#c4160c'],users:['#ffb340','#ff8a00'],phone:['#4cd964','#1fa84a'],music:['#ff9a1f','#e66a00'],map:['#4aa3ff','#0a6cff'],folder:['#6ec1ff','#2f7de0'],radio:['#c77dff','#8e3fd1'],cam:['#a0a8b4','#6b7380'],obd:['#f5a524','#b8760a'],cloud:['#6fd3ff','#2f9bd6'],search:['#ff6b5e','#d92d20'],gear:['#a5adba','#6b7380'],cal:['#ff5e55','#d62d25'],car:['#f5a524','#b8760a']};
+$('#apps').innerHTML=apps.map((a,i)=>`<button data-a="${i}" ${a[2]==='#obd'?'id="obdtile" class="st-wait"':a[2]==='#info'?'id="vstile" class="st-wait"':''}><span class="chip k-${a[1]}" style="--c1:${COL[a[1]][0]};--c2:${COL[a[1]][1]}">${I(a[1],22)}</span>${a[0]}</button>`).join('');
 $('#apps').onclick=e=>{const b=e.target.closest('button');if(!b)return;const[n,,u]=apps[b.dataset.a];
  if(u==='#info')return go('info');if(u==='#camv')return openCam();if(u==='#wx')return openWx();if(u==='#set')return openSet();
  if(u==='#nav')return openNav();if(u==='#con')return openCon();if(u==='#dial')return openDial();if(u==='#rad')return openRadio();
  if(u==='#obd')return toast(live('rpm')!=null||live('cool')!=null?'OBD2: connected':'OBD2: not connected');
  if(!u)return toast(n+': iOS cannot open this from a web app.');
  let hid=false;document.addEventListener('visibilitychange',()=>hid=document.hidden,{once:true});location.href=u;
- setTimeout(()=>{if(!hid&&!document.hidden)toast(u==='vlc://'?'VLC did not open. Install VLC for Mobile from the App Store.':n+': iOS did not open the app.')},1500)};
+ setTimeout(()=>{if(!hid&&!document.hidden)toast(u==='vlc://'?'VLC did not open. Install VLC for Mobile from the App Store.':n+' did not open. Is the app installed?')},1500)};
 $('#smart').onclick=()=>toast('ESP32 not connected. Controls appear here once a verified connection exists.');
 const sb=[['Bluetooth','bt'],['Wi-Fi','wifi'],['Signal','sig'],['Internet','data'],['Brightness','sun'],['Battery','batt'],['GPS','pin']];
 $('#sbar').innerHTML=sb.map((s,i)=>`<button id="sb${i}" class="st-wait" data-s="${i}">${I(s[1],24)}</button>`).join('');
@@ -154,9 +197,9 @@ $('#sbar').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+
  const c=['st-ok','st-wait','st-err','st-unk'].find(c=>b.classList.contains(c));
  toast(sb[i][0]+': '+{'st-ok':'connected','st-wait':'not connected, or not confirmed (iPhone Safari cannot read this status)','st-err':'error','st-unk':'unknown (iPhone Safari cannot read this)'}[c])};
 // GPS
-let gpsErr='',pos=null,heading=null,gspeed=null,gpsState='off',watch=null,trail=[],off={x:0,y:0};
+let gpsT=0,gpsErr='',pos=null,heading=null,gspeed=null,gpsState='off',watch=null,trail=[],off={x:0,y:0};
 function startGPS(){if(!navigator.geolocation){gpsState='err';gpsErr='GPS not supported';return}
- gpsState='wait';if(watch!=null)navigator.geolocation.clearWatch(watch);
+ gpsState='wait';gpsT=now();if(watch!=null)navigator.geolocation.clearWatch(watch);
  watch=navigator.geolocation.watchPosition(p=>{const c=p.coords;gpsState='ok';gpsErr='';pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,t:now()};
   gspeed=c.speed!=null&&c.speed>=0?c.speed*3.6:null;heading=(c.heading!=null&&!isNaN(c.heading)&&(c.speed||0)>1.5)?c.heading:heading;
   if(c.accuracy<=30){const l=trail[trail.length-1];if(!l||hav(l,pos)>3){trail.push(pos);if(trail.length>1500)trail.shift()}}},
@@ -242,13 +285,16 @@ function netUpdate(){const c=navigator.connection,t=c&&c.type;
  cls($('#sb0'),'wait');cls($('#sb1'),t==='wifi'?'ok':'wait');cls($('#sb2'),t==='cellular'?'ok':'wait');
  cls($('#sb3'),pingOK===true?'ok':'wait');cls($('#sb4'),'ok');cls($('#sb5'),batt&&(batt.level>.2||batt.charging)?'ok':'wait')}
 document.addEventListener('pointerdown',()=>{const el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(f&&!document.fullscreenElement)try{const q=f.call(el);q&&q.catch&&q.catch(()=>{})}catch(e){}},{once:true});
-if(navigator.permissions)navigator.permissions.query({name:'geolocation'}).then(r=>{if(r.state==='granted')startGPS()}).catch(()=>{});
+startGPS();
+setInterval(()=>{if(gpsState!=='err'&&(!pos||now()-pos.t>15000)&&now()-gpsT>12000)startGPS()},5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&gpsState!=='err')startGPS()});
 // render
 function render(){
  const age=pos?now()-pos.t:1e9,gOk=pos&&age<20000&&gpsState==='ok',sp=gOk&&gspeed!=null&&(age<5000||gspeed<1)?Math.round(gspeed):null;
  setV('#spd',sp);$('#spd').style.color=sp==null?'':'#fff';
  const g=$('#gpsmsg'),m={off:['GPS: not connected','val','wait'],wait:[gpsErr||'GPS: waiting…','wait','wait'],ok:gOk?['GPS ±'+Math.round(pos.acc)+' m','ok','ok']:['GPS: signal lost','wait','wait'],err:[gpsErr||'GPS error','err','err']}[gpsState];
  g.textContent=m[0];g.className=m[1];cls($('#sb6'),m[2]);
+ {const gv=live('gear');['P','R','N','D'].forEach(l=>$('#g'+l).classList.toggle('on',gv!=null&&String(gv).toUpperCase()===l));$('#gear').textContent=gv==null?'--':(/^\d$/.test(gv)?'D'+gv:'');$('#gear').className=gv==null?'val':'ok'}
  const r=live('rpm');setV('#rpm',r);$('#rpmfill').style.width=r==null?0:Math.min(100,r/7000*100)+'%';
  ['cool','oil','bat'].forEach(k=>{const v=live(k);setV('#i_'+k,v);cls($('#c_'+k),v==null?'wait':'ok')});
  const obd=['rpm','cool','oil','bat'].some(k=>live(k)!=null);
