@@ -148,27 +148,39 @@ button{font:inherit;color:inherit;background:none;border:0}
 #dash #map{position:absolute;inset:auto;left:-50%;top:-58%;width:200%;height:240%;transform:rotateX(52deg);transform-origin:50% 50%;pointer-events:none}
 .fade{position:absolute;left:0;right:0;top:0;height:42%;background:linear-gradient(#080b10 10%,#0000);pointer-events:none}
 .carm{position:absolute;left:50%;top:62%;width:calc(var(--u)*58);height:calc(var(--u)*58);transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px #2f8cffaa)}
+/* v11: vector 3D map, black speed panel, single vehicle button + apps button */
+#gl{position:absolute;inset:0}.maplibregl-map{position:relative;overflow:hidden}.maplibregl-canvas{position:absolute;left:0;top:0}
+.vl{width:calc(var(--u)*330);background:linear-gradient(90deg,#05080d 0,#05080d 60%,#0000)}
+.vr{width:calc(var(--u)*170);background:linear-gradient(270deg,#05080dee 0,#05080d99 45%,#0000)}
+.hl{background:radial-gradient(ellipse at 50% 42%,#0b2a5577 0%,#0000 68%)}
+.hr{bottom:auto}
+.vb,.ab{position:absolute;bottom:calc(var(--u)*14 + env(safe-area-inset-bottom,0px));height:calc(var(--u)*34);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);border-radius:calc(var(--u)*11);background:#ffffff10;border:1px solid #ffffff1c;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.vb{left:calc(env(safe-area-inset-left,0px) + var(--u)*18);width:calc(var(--u)*198)}
+.vb b{font-size:calc(var(--u)*10.5);letter-spacing:.1em;font-weight:600;color:#e6e9ee}
+.vb svg,.ab svg{width:calc(var(--u)*20);height:calc(var(--u)*20);display:block}
+.ab{right:calc(env(safe-area-inset-right,0px) + var(--u)*18);width:calc(var(--u)*46);color:#cfd6df}
+.vb:active,.ab:active{background:#ffffff22}
+#attr{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*2 + env(safe-area-inset-bottom,0px));font-size:calc(var(--u)*7);color:#5f6b7a;pointer-events:none;white-space:nowrap}
+#gpsban{bottom:calc(var(--u)*54 + env(safe-area-inset-bottom,0px))}
+@media (orientation:landscape){.cards{grid-template-columns:repeat(4,1fr)}}
 </style></head><body>
 
 <div id="top"><div class="tl1"><span data-i="therm"></span><span id="tmp">--</span></div><span id="clk">--:--</span><div class="tr1"><div id="sbar"></div><span id="gpslbl" class="st-wait">GPS</span><span id="gbars"><i></i><i></i><i></i><i></i></span></div></div>
 <section class="page on" id="dash">
- <div id="mapbox"><canvas id="map"></canvas></div><div class="fade"></div><div class="vl"></div><div class="vr"></div><svg class="carm" viewBox="-30 -30 60 60"><polygon points="0,-26 25,22 0,12 -25,22" fill="#2f8cff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg>
+ <div id="mapbox"><div id="gl"></div><canvas id="map"></canvas></div><div class="fade"></div><div class="vl"></div><div class="vr"></div><svg class="carm" viewBox="-30 -30 60 60"><polygon points="0,-26 25,22 0,12 -25,22" fill="#2f8cff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg>
  <div class="nvb" id="nvb" style="display:none"><span id="nvt"></span><button id="nvx">&#10005;</button></div>
  <div class="ban tm" id="tmsg" style="display:none">Map tiles unavailable (blocked or offline)</div>
  <div class="hl"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
  <div class="rpbox"><div class="rr"><span class="lbl">RPM</span><span class="rv"><b id="rpm" class="val">--</b><small>rpm</small></span></div>
   <div class="rpmbar"><div id="rpmfill"></div></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
  <div class="hr"><div class="gearbox"><b id="gear" class="val">--</b><span hidden><i id="gP"></i><i id="gR"></i><i id="gN"></i><i id="gD"></i></span></div>
-  <div class="fuelbox"><div class="fr"><span data-i="fuel"></span><b id="fuel" class="val">-- %</b></div><div class="rpmbar fbar"><div id="fuelfill"></div></div><div class="ticks"><span>E</span><span>F</span></div></div></div>
+  </div>
+ <div id="attr">&copy; OpenFreeMap &copy; OpenMapTiles &middot; Data &copy; OpenStreetMap</div>
  <div class="mc"><button class="fc" id="zin">+</button><button class="fc" id="zout">&minus;</button></div>
  <div class="ban" id="gpsban"><span id="gpsmsg" class="val">GPS: not connected</span><button id="conn">Connect GPS</button></div>
- <div class="dots"><i class="on" data-go="dash"></i><i data-go="launch"></i></div>
- <div class="b4">
-  <div class="bc st-wait" id="bc_cool" data-go="info"><span data-i="therm"></span><div><small>Water Temp</small><b><span id="b_cool" class="val">--</span> &deg;C</b></div></div>
-  <div class="bc st-wait" id="bc_oil" data-go="info"><span data-i="oil"></span><div><small>Oil Temp</small><b><span id="b_oil" class="val">--</span> &deg;C</b></div></div>
-  <div class="bc st-wait" id="bc_bat" data-go="info"><span data-i="bat"></span><div><small>Battery</small><b><span id="b_bat" class="val">--</span> V</b></div></div>
-  <button class="bc st-wait" id="vbtn" data-go="info"><span data-i="car"></span><div><small>Vehicle</small><b>Info &rsaquo;</b></div></button>
- </div>
+
+ <button class="vb st-wait" id="vbtn" data-go="info" aria-label="Vehicle status"><span data-i="car"></span><b>VEHICLE STATUS</b></button>
+ <button class="ab" data-go="launch" aria-label="Apps"><span data-i="grid"></span></button>
 </section>
 
 <section class="page" id="launch">
@@ -183,6 +195,7 @@ button{font:inherit;color:inherit;background:none;border:0}
   <div class="cd st-wait" id="c_cool"><span data-i="therm"></span><small>ENGINE COOLANT</small><b id="i_cool">--</b><small>&deg;C</small></div>
   <div class="cd st-wait" id="c_oil"><span data-i="oil"></span><small>ENGINE OIL</small><b id="i_oil">--</b><small>&deg;C</small></div>
   <div class="cd st-wait" id="c_bat"><span data-i="bat"></span><small>BATTERY</small><b id="i_bat">--</b><small>V</small></div>
+  <div class="cd st-wait" id="c_fuel"><span data-i="fuel"></span><small>FUEL LEVEL</small><b id="i_fuel">--</b><small>%</small></div>
  </div>
 </section>
 <input type="file" id="cam" accept="image/*" capture="environment" hidden>
@@ -222,7 +235,7 @@ function setV(id,v){const e=$(id);e.textContent=v==null?'--':v;e.className=v==nu
 const cls=(e,s)=>{e.classList.remove('st-off','st-ok','st-wait','st-err','st-unk');e.classList.add('st-'+s)};
 // pages
 let cur='dash',prev='dash';
-function go(p){if(p==='back')p=prev;if(p==='info'&&cur!=='info')prev=cur;cur=p;$$('.page').forEach(e=>e.classList.toggle('on',e.id===p));requestAnimationFrame(sizeMap)}
+function go(p){if(p==='back')p=prev;if(p==='info'&&cur!=='info')prev=cur;cur=p;$$('.page').forEach(e=>e.classList.toggle('on',e.id===p));requestAnimationFrame(()=>{sizeMap();if(gl&&glOK)gl.resize()})}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t)go(t.dataset.go)});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;if(a==='dash')go('dash');else if(a==='nav')openNav();else if(a==='phone')openDial();else if(a==='music'){let h=false;document.addEventListener('visibilitychange',()=>h=document.hidden,{once:true});location.href='vlc://';setTimeout(()=>{if(!h&&!document.hidden)toast('VLC did not open. Install VLC for Mobile from the App Store.')},1500)}});
 let sx=null;document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
@@ -266,7 +279,7 @@ function sizeMap(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=cv.clientW
 addEventListener('resize',sizeMap);sizeMap();
 $('#zin').onclick=()=>Z=Math.min(18,Z+1);$('#zout').onclick=()=>Z=Math.max(12,Z-1);
 const px=(lat,lon)=>{const s=256*2**Z,r=Math.PI/180;return{x:(lon+180)/360*s,y:(1-Math.log(Math.tan(lat*r)+1/Math.cos(lat*r))/Math.PI)/2*s}};
-const SRC=[(z,x,y)=>`https://${'abc'[(x+y)%3]}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}@2x.png`,(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,(z,x,y)=>`https://a.tile.openstreetmap.fr/osmfr/${z}/${x}/${y}.png`,(z,x,y)=>`https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/${z}/${y}/${x}`];let goodSrc=0;
+const SRC=[(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,(z,x,y)=>`https://a.tile.openstreetmap.fr/osmfr/${z}/${x}/${y}.png`];let goodSrc=0;
 function tile(x,y){const z=Z,k=z+'/'+x+'/'+y;if(!tiles[k]){const i=new Image();i.t=0;i.s=goodSrc;i.onload=()=>{i.ok=true;tileOK=true;goodSrc=i.s};
  i.onerror=()=>{if(++i.t<SRC.length){i.s=(i.s+1)%SRC.length;i.src=SRC[i.s](z,x,y)}else tileFail++};i.src=SRC[i.s](z,x,y);tiles[k]=i}return tiles[k]}
 
@@ -275,7 +288,7 @@ function drawMap(){const w=cv.clientWidth,h=cv.clientHeight;cx.fillStyle='#0c0f1
  if(!dpos)dpos={lat:pos.lat,lon:pos.lon};dpos.lat+=(pos.lat-dpos.lat)*.12;dpos.lon+=(pos.lon-dpos.lon)*.12;if(heading!=null)dh=dh==null?heading:dh+((((heading-dh)%360)+540)%360-180)*.12;const c=px(dpos.lat,dpos.lon);cx.save();cx.translate(w/2,h/2);if(dh!=null)cx.rotate(-dh*Math.PI/180);
  const R=Math.hypot(w,h)/2+300,x0=Math.floor((c.x-R)/256),x1=Math.floor((c.x+R)/256),y0=Math.floor((c.y-R)/256),y1=Math.floor((c.y+R)/256);
  cx.strokeStyle='#1b222c';for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const X=x*256-c.x,Y=y*256-c.y,im=x1-x0<16?tile(x,y):null;
-  if(im&&im.ok){cx.globalAlpha=im.s?.65:1;cx.drawImage(im,X,Y,256,256);cx.globalAlpha=1}else cx.strokeRect(X,Y,256,256)}
+  if(im&&im.ok){cx.globalAlpha=.7;cx.drawImage(im,X,Y,256,256);cx.globalAlpha=1}else cx.strokeRect(X,Y,256,256)}
  if(route){cx.strokeStyle='#3b78e8';cx.lineWidth=7;cx.lineJoin='round';cx.beginPath();route.forEach((p,i)=>{const q=px(p.lat,p.lon);i?cx.lineTo(q.x-c.x,q.y-c.y):cx.moveTo(q.x-c.x,q.y-c.y)});cx.stroke()}
  cx.strokeStyle='#9bb5e0';cx.lineWidth=3;cx.beginPath();trail.forEach((p,i)=>{const q=px(p.lat,p.lon);i?cx.lineTo(q.x-c.x,q.y-c.y):cx.moveTo(q.x-c.x,q.y-c.y)});cx.stroke();cx.restore();
  }
@@ -287,7 +300,7 @@ $('#shx').onclick=closeSheet;
 async function openCam(){openSheet('<video id="cvid" autoplay playsinline muted style="width:100%;height:100%;object-fit:contain"></video>');
  try{camS=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});$('#cvid').srcObject=camS}
  catch(e){$('#shb').innerHTML='<p style="padding:24px">Camera unavailable ('+e.name+'). Allow Camera for this site in Safari.</p>'}}
-function openSet(){openSheet('<div style="padding:24px"><div class="lbl">BRIGHTNESS (inside this app)</div><input type="range" min="20" max="100" id="br" value="'+Math.round((1-(+$('#dim').style.opacity||0))*100)+'" style="width:80%;margin-top:14px"><div style="margin-top:20px"><button class="sbtn" id="vc">Change VPN app</button></div><div class="val" style="margin-top:16px;font-size:11px">Smart Sandero v10</div></div>');$('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}};$('#br').oninput=e=>{$('#dim').style.opacity=1-e.target.value/100}}
+function openSet(){openSheet('<div style="padding:24px"><div class="lbl">BRIGHTNESS (inside this app)</div><input type="range" min="20" max="100" id="br" value="'+Math.round((1-(+$('#dim').style.opacity||0))*100)+'" style="width:80%;margin-top:14px"><div style="margin-top:20px"><button class="sbtn" id="vc">Change VPN app</button></div><div class="val" style="margin-top:16px;font-size:11px">Smart Sandero v11</div></div>');$('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}};$('#br').oninput=e=>{$('#dim').style.opacity=1-e.target.value/100}}
 let weather=null,wxT=0;
 const WC=n=>n===0?'Clear':n<=3?'Partly cloudy':n<=48?'Fog':n<=57?'Drizzle':n<=67?'Rain':n<=77?'Snow':n<=82?'Showers':'Thunderstorm';
 async function loadWx(){wxT=now();try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.lat.toFixed(3)}&longitude=${pos.lon.toFixed(3)}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code`);const j=await r.json();if(j.current){weather=j.current;weather.at=now()}}catch(e){}}
@@ -339,6 +352,24 @@ function openVpn(){const cur=LS.get('vpn',null);if(cur)return launchVpn(cur);
  const pr=[['WireGuard','wireguard://'],['Shadowrocket','shadowrocket://'],['V2Box','v2box://'],['Streisand','streisand://'],['Hiddify','hiddify://']];
  openSheet(`<div style="padding:48px 20px 12px"><div class="lbl">VPN · choose your VPN app once</div><div class="addr" style="flex-wrap:wrap">${pr.map(x=>`<button data-u="${x[1]}">${x[0]}</button>`).join('')}</div><div class="addr"><input id="vu" placeholder="Custom link, e.g. myvpn://"><button id="vs">Save</button></div><p class="val" style="font-size:12px">Safest: make an iPhone Shortcut named VPN (action: Open App), then save shortcuts://run-shortcut?name=VPN</p></div>`);
  $('#shb').onclick=e=>{const t=e.target.closest('button');if(!t)return;const u=t.dataset.u||(t.id==='vs'?$('#vu').value.trim():'');if(!u)return;LS.set('vpn',u);closeSheet();launchVpn(u)}}
+// 3D vector map: MapLibre + OpenFreeMap dark style (no API key)
+let gl=null,glOK=false,routeShown=null;
+function loadGL(){const u=['https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js'];
+ (function nx(i){if(i>=u.length)return;const sc=document.createElement('script');sc.src=u[i];sc.onload=initGL;sc.onerror=()=>nx(i+1);document.head.appendChild(sc)})(0)}
+async function initGL(){try{
+ const st=await (await fetch('https://tiles.openfreemap.org/styles/dark')).json();
+ const vs=Object.keys(st.sources).find(k=>st.sources[k].type==='vector');
+ if(vs&&!st.layers.some(l=>l.type==='fill-extrusion'))st.layers.push({id:'b3d',type:'fill-extrusion',source:vs,'source-layer':'building',minzoom:14,paint:{'fill-extrusion-color':'#232c38','fill-extrusion-height':['coalesce',['get','render_height'],6],'fill-extrusion-base':['coalesce',['get','render_min_height'],0],'fill-extrusion-opacity':.92}});
+ gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:Z-.5,pitch:60,interactive:false,attributionControl:false,fadeDuration:0});
+ gl.on('load',()=>{gl.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+  gl.addLayer({id:'route-c',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#0a3d91','line-width':16}});
+  gl.addLayer({id:'route',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#1e7bff','line-width':10}});
+  glOK=true;$('#map').style.display='none'})}catch(e){}}
+function updGL(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on?1:0;if(!on)return;
+ if(!dpos)dpos={lat:pos.lat,lon:pos.lon};dpos.lat+=(pos.lat-dpos.lat)*.12;dpos.lon+=(pos.lon-dpos.lon)*.12;
+ if(heading!=null)dh=dh==null?heading:dh+((((heading-dh)%360)+540)%360-180)*.12;
+ if(routeShown!==route){routeShown=route;gl.getSource('route').setData({type:'FeatureCollection',features:route?[{type:'Feature',geometry:{type:'LineString',coordinates:route.map(p=>[p.lon,p.lat])}}]:[]})}
+ gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:Z-.5,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:0,right:0}})}
 // connectivity (only what iPhone Safari can truly read)
 let pingOK=null,batt=null;
 async function doPing(){try{const r=await fetch('manifest.webmanifest?'+now(),{cache:'no-store'});pingOK=r.ok}catch(e){pingOK=false}}
@@ -361,13 +392,13 @@ function render(){
  {const nb=gOk?(pos.acc<=10?4:pos.acc<=25?3:pos.acc<=60?2:1):0;$$('#gbars i').forEach((e,k)=>e.style.background=k<nb?'var(--grn)':'#333')}
  $('#gpsban').style.display=gOk?'none':'flex';
  {const gv=live('gear');['P','R','N','D'].forEach(l=>$('#g'+l).classList.toggle('on',gv!=null&&String(gv).toUpperCase()===l));$('#gear').textContent=gv==null?'--':String(gv).toUpperCase();$('#gear').className=gv==null?'val':'ok'}
- {const f=live('fuel');$('#fuel').textContent=f==null?'-- %':Math.round(f)+' %';$('#fuel').className=f==null?'val':'ok';$('#fuelfill').style.width=f==null?0:Math.max(0,Math.min(100,f))+'%'}
+ {const f=live('fuel');setV('#i_fuel',f);cls($('#c_fuel'),f==null?'wait':'ok')}
  const r=live('rpm');setV('#rpm',r);$('#rpmfill').style.width=r==null?0:Math.min(100,r/7000*100)+'%';
- ['cool','oil','bat'].forEach(k=>{const v=live(k);setV('#i_'+k,v);cls($('#c_'+k),v==null?'wait':'ok');setV('#b_'+k,v);cls($('#bc_'+k),v==null?'wait':'ok')});
+ ['cool','oil','bat'].forEach(k=>{const v=live(k);setV('#i_'+k,v);cls($('#c_'+k),v==null?'wait':'ok')});
  const obd=['rpm','cool','oil','bat'].some(k=>live(k)!=null);
  ['#vbtn','#obdtile','#vstile','#obdchip'].forEach(q=>cls($(q),obd?'ok':'wait'));cls($('#smart'),'wait');$('#obdchip').textContent='OBD2: '+(obd?'connected':'not connected');
  {const nb=$('#nvb');if(navInfo){nb.style.display='flex';$('#nvt').textContent='➤ '+navInfo.name+' · '+navInfo.km.toFixed(1)+' km · '+Math.round(navInfo.min)+' min'}else nb.style.display='none'}
  $('#tmsg').style.display=tileFail>6&&!tileOK?'flex':'none';$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
  $('#tmp').textContent=weather&&now()-weather.at<1800000?Math.round(weather.temperature_2m)+'°C':'--'}
-setInterval(render,300);render();let fr=0;(function lp(){if(cur==='dash'&&(fr++&1))drawMap();requestAnimationFrame(lp)})();
+setInterval(render,300);render();loadGL();let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
 </script></body></html>
