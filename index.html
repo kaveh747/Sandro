@@ -148,6 +148,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 #dash #map{position:absolute;inset:auto;left:-50%;top:-58%;width:200%;height:240%;transform:rotateX(52deg);transform-origin:50% 50%;pointer-events:none}
 .fade{position:absolute;left:0;right:0;top:0;height:42%;background:linear-gradient(#080b10 10%,#0000);pointer-events:none}
 .carm{position:absolute;left:50%;top:62%;width:calc(var(--u)*58);height:calc(var(--u)*58);transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 8px #2f8cffaa)}
+#gl{filter:brightness(.82) saturate(1.15)}
 /* v11: vector 3D map, black speed panel, single vehicle button + apps button */
 #gl{position:absolute;inset:0}.maplibregl-map{position:relative;overflow:hidden}.maplibregl-canvas{position:absolute;left:0;top:0}
 .vl{width:calc(var(--u)*330);background:linear-gradient(90deg,#05080d 0,#05080d 60%,#0000)}
@@ -300,7 +301,7 @@ $('#shx').onclick=closeSheet;
 async function openCam(){openSheet('<video id="cvid" autoplay playsinline muted style="width:100%;height:100%;object-fit:contain"></video>');
  try{camS=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});$('#cvid').srcObject=camS}
  catch(e){$('#shb').innerHTML='<p style="padding:24px">Camera unavailable ('+e.name+'). Allow Camera for this site in Safari.</p>'}}
-function openSet(){openSheet('<div style="padding:24px"><div class="lbl">BRIGHTNESS (inside this app)</div><input type="range" min="20" max="100" id="br" value="'+Math.round((1-(+$('#dim').style.opacity||0))*100)+'" style="width:80%;margin-top:14px"><div style="margin-top:20px"><button class="sbtn" id="vc">Change VPN app</button></div><div class="val" style="margin-top:16px;font-size:11px">Smart Sandero v11</div></div>');$('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}};$('#br').oninput=e=>{$('#dim').style.opacity=1-e.target.value/100}}
+function openSet(){openSheet('<div style="padding:24px"><div class="lbl">BRIGHTNESS (inside this app)</div><input type="range" min="20" max="100" id="br" value="'+Math.round((1-(+$('#dim').style.opacity||0))*100)+'" style="width:80%;margin-top:14px"><div style="margin-top:20px"><button class="sbtn" id="vc">Change VPN app</button></div><div class="val" style="margin-top:16px;font-size:11px">Smart Sandero v12</div></div>');$('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}};$('#br').oninput=e=>{$('#dim').style.opacity=1-e.target.value/100}}
 let weather=null,wxT=0;
 const WC=n=>n===0?'Clear':n<=3?'Partly cloudy':n<=48?'Fog':n<=57?'Drizzle':n<=67?'Rain':n<=77?'Snow':n<=82?'Showers':'Thunderstorm';
 async function loadWx(){wxT=now();try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.lat.toFixed(3)}&longitude=${pos.lon.toFixed(3)}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code`);const j=await r.json();if(j.current){weather=j.current;weather.at=now()}}catch(e){}}
@@ -357,9 +358,9 @@ let gl=null,glOK=false,routeShown=null;
 function loadGL(){const u=['https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js'];
  (function nx(i){if(i>=u.length)return;const sc=document.createElement('script');sc.src=u[i];sc.onload=initGL;sc.onerror=()=>nx(i+1);document.head.appendChild(sc)})(0)}
 async function initGL(){try{
- const st=await (await fetch('https://tiles.openfreemap.org/styles/dark')).json();
+ const st=await (await fetch('https://tiles.openfreemap.org/styles/liberty')).json();
  const vs=Object.keys(st.sources).find(k=>st.sources[k].type==='vector');
- if(vs&&!st.layers.some(l=>l.type==='fill-extrusion'))st.layers.push({id:'b3d',type:'fill-extrusion',source:vs,'source-layer':'building',minzoom:14,paint:{'fill-extrusion-color':'#232c38','fill-extrusion-height':['coalesce',['get','render_height'],6],'fill-extrusion-base':['coalesce',['get','render_min_height'],0],'fill-extrusion-opacity':.92}});
+ if(vs&&!st.layers.some(l=>l.type==='fill-extrusion'))st.layers.push({id:'b3d',type:'fill-extrusion',source:vs,'source-layer':'building',minzoom:14,paint:{'fill-extrusion-color':'#c9c6bf','fill-extrusion-height':['coalesce',['get','render_height'],6],'fill-extrusion-base':['coalesce',['get','render_min_height'],0],'fill-extrusion-opacity':.92}});
  gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:Z-.5,pitch:60,interactive:false,attributionControl:false,fadeDuration:0});
  gl.on('load',()=>{gl.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
   gl.addLayer({id:'route-c',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#0a3d91','line-width':16}});
