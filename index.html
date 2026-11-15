@@ -294,7 +294,7 @@ function hav(a,b){const R=6371000,r=Math.PI/180,dl=(b.lat-a.lat)*r,dn=(b.lon-a.l
 const cv=$('#map'),cx=cv.getContext('2d'),tiles={};let Z=16,dpos=null,dh=null,tileOK=false,tileFail=0;
 function sizeMap(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=cv.clientWidth*d;cv.height=cv.clientHeight*d;cx.setTransform(d,0,0,d,0,0)}
 addEventListener('resize',sizeMap);sizeMap();
-$('#zin').onclick=()=>Z=Math.min(18,Z+1);$('#zout').onclick=()=>Z=Math.max(12,Z-1);
+$('#zin').onclick=()=>{Z=Math.min(18,Z+1);ZG=Math.min(19.5,ZG+.5)};$('#zout').onclick=()=>{Z=Math.max(12,Z-1);ZG=Math.max(15,ZG-.5)};
 const px=(lat,lon)=>{const s=256*2**Z,r=Math.PI/180;return{x:(lon+180)/360*s,y:(1-Math.log(Math.tan(lat*r)+1/Math.cos(lat*r))/Math.PI)/2*s}};
 const SRC=[(z,x,y)=>`https://tile.openstreetmap.org/${z}/${x}/${y}.png`,(z,x,y)=>`https://a.tile.openstreetmap.fr/osmfr/${z}/${x}/${y}.png`];let goodSrc=0;
 function tile(x,y){const z=Z,k=z+'/'+x+'/'+y;if(!tiles[k]){const i=new Image();i.t=0;i.s=goodSrc;i.onload=()=>{i.ok=true;tileOK=true;goodSrc=i.s};
@@ -321,7 +321,7 @@ const mq=matchMedia('(prefers-color-scheme: dark)');
 function applyBright(){const auto=LS.get('bmode','a')==='a',v=auto?(mq.matches?72:100):LS.get('bman',100);$('#dim').style.opacity=1-v/100;return v}
 if(mq.addEventListener)mq.addEventListener('change',applyBright);
 function openSet(){const auto=LS.get('bmode','a')==='a';
- openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v14</div></div>`);
+ openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v15</div></div>`);
  $('#br').oninput=e=>{LS.set('bmode','m');LS.set('bman',+e.target.value);applyBright()};
  $('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}else if(e.target.id==='ba'){LS.set('bmode','a');openSet()}}}
 let weather=null,wxT=0;
@@ -376,23 +376,39 @@ function openVpn(){const cur=LS.get('vpn',null);if(cur)return launchVpn(cur);
  openSheet(`<div style="padding:48px 20px 12px"><div class="lbl">VPN · choose your VPN app once</div><div class="addr" style="flex-wrap:wrap">${pr.map(x=>`<button data-u="${x[1]}">${x[0]}</button>`).join('')}</div><div class="addr"><input id="vu" placeholder="Custom link, e.g. myvpn://"><button id="vs">Save</button></div><p class="val" style="font-size:12px">Safest: make an iPhone Shortcut named VPN (action: Open App), then save shortcuts://run-shortcut?name=VPN</p></div>`);
  $('#shb').onclick=e=>{const t=e.target.closest('button');if(!t)return;const u=t.dataset.u||(t.id==='vs'?$('#vu').value.trim():'');if(!u)return;LS.set('vpn',u);closeSheet();launchVpn(u)}}
 // 3D vector map: MapLibre + OpenFreeMap dark style (no API key)
-let gl=null,glOK=false,routeShown=null,glState='loading',glErrs=0,tilesGL=0;
+let gl=null,glOK=false,routeShown=null,glState='loading',glErrs=0,tilesGL=0,ZG=17.6,roadL=[],snapT=null,snapAt=0;
 function loadGL(){setTimeout(()=>{if(!glOK)glState='fail'},20000);const u=['https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js','https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/maplibre-gl.js'];
  (function nx(i){if(i>=u.length){glState='fail';return}const sc=document.createElement('script');sc.src=u[i];sc.onload=initGL;sc.onerror=()=>nx(i+1);document.head.appendChild(sc)})(0)}
 async function initGL(){try{
  const st=await (await fetch('https://tiles.openfreemap.org/styles/liberty')).json();
  const vs=Object.keys(st.sources).find(k=>st.sources[k].type==='vector');
+ {const EN=['coalesce',['get','name:en'],['get','name_en'],['get','name:latin'],['get','int_name'],''];
+  for(const l of st.layers){if(l.layout&&l.layout['text-field']&&!/shield|ref|housenumber/.test(l.id))l.layout['text-field']=EN}
+  const cosL=Math.cos((pos?pos.lat:35.7)*Math.PI/180),wm=id=>/motorway|trunk/.test(id)?16:/primary/.test(id)?14:/secondary/.test(id)?12:/tertiary/.test(id)?10:/service|track/.test(id)?5:/path|pedestrian|footway|steps/.test(id)?2.5:8;
+  for(const l of st.layers){if(l['source-layer']==='transportation'&&l.type==='line'&&/^(road|bridge|tunnel)_/.test(l.id)&&!/rail|transit|ferry|aeroway/.test(l.id)){
+   const a=wm(l.id)*(/casing/.test(l.id)?1.3:1)/(78272*cosL);l.paint=l.paint||{};l.paint['line-width']=['interpolate',['exponential',2],['zoom'],0,a,22,a*4194304];delete l.paint['line-gap-width']}}}
  if(vs&&!st.layers.some(l=>l.type==='fill-extrusion'))st.layers.push({id:'b3d',type:'fill-extrusion',source:vs,'source-layer':'building',minzoom:14,paint:{'fill-extrusion-color':'#c9c6bf','fill-extrusion-height':['coalesce',['get','render_height'],6],'fill-extrusion-base':['coalesce',['get','render_min_height'],0],'fill-extrusion-opacity':.92}});
- gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:Z-.5,pitch:60,interactive:false,attributionControl:false,fadeDuration:0});
+ gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:ZG,pitch:60,interactive:false,attributionControl:false,fadeDuration:0});
  gl.on('load',()=>{gl.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
   gl.addLayer({id:'route-c',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#0a3d91','line-width':16}});
   gl.addLayer({id:'route',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#1e7bff','line-width':10}});
-  glOK=true;glState='ok';$('#map').style.display='none'});gl.on('error',()=>{glErrs++});gl.on('data',e=>{if(e.dataType==='source'&&e.tile)tilesGL++})}catch(e){glState='fail'}}
+  roadL=gl.getStyle().layers.filter(l=>l['source-layer']==='transportation'&&l.type==='line'&&/^(road|bridge|tunnel)_/.test(l.id)&&!/casing|rail|transit|ferry|aeroway|path|pedestrian/.test(l.id)).map(l=>l.id);glOK=true;glState='ok';$('#map').style.display='none'});gl.on('error',()=>{glErrs++});gl.on('data',e=>{if(e.dataType==='source'&&e.tile)tilesGL++})}catch(e){glState='fail'}}
+function nearestSeg(lon,lat,a,b){const kx=111320*Math.cos(lat*Math.PI/180),ky=110540,ax=(a[0]-lon)*kx,ay=(a[1]-lat)*ky,bx=(b[0]-lon)*kx,by=(b[1]-lat)*ky,dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy;
+ let t=L?(-(ax*dx+ay*dy))/L:0;t=Math.max(0,Math.min(1,t));const x=ax+t*dx,y=ay+t*dy;return{d:Math.hypot(x,y),lon:lon+x/kx,lat:lat+y/ky,brg:(Math.atan2(dx,dy)*180/Math.PI+360)%360}}
+function doSnap(){snapAt=now();snapT=null;if(!glOK||!pos||!dpos||pos.acc>50)return;
+ const p=gl.project([dpos.lon,dpos.lat]),r=32;let fs=[];
+ try{fs=gl.queryRenderedFeatures([[p.x-r,p.y-r],[p.x+r,p.y+r]],roadL.length?{layers:roadL}:undefined)}catch(e){return}
+ let best=null;for(const f of fs){const g=f.geometry,ls=g.type==='LineString'?[g.coordinates]:g.type==='MultiLineString'?g.coordinates:[];
+  for(const ln of ls)for(let i=0;i<ln.length-1;i++){const q=nearestSeg(pos.lon,pos.lat,ln[i],ln[i+1]);if(!best||q.d<best.d)best=q}}
+ if(best&&best.d<Math.max(25,pos.acc*1.5))snapT=best}
 function updGL(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on?1:0;if(!on)return;
- if(!dpos)dpos={lat:pos.lat,lon:pos.lon};dpos.lat+=(pos.lat-dpos.lat)*.12;dpos.lon+=(pos.lon-dpos.lon)*.12;
- if(heading!=null)dh=dh==null?heading:dh+((((heading-dh)%360)+540)%360-180)*.12;
+ if(!dpos)dpos={lat:pos.lat,lon:pos.lon};
+ if(now()-snapAt>250)doSnap();
+ const tg=snapT||pos;dpos.lat+=(tg.lat-dpos.lat)*.15;dpos.lon+=(tg.lon-dpos.lon)*.15;
+ let th=heading;if(snapT&&heading!=null&&gspeed!=null&&gspeed>5){const a=snapT.brg,b=(a+180)%360,dd=x=>Math.abs(((x-heading)%360+540)%360-180);th=dd(a)<dd(b)?a:b}
+ if(th!=null)dh=dh==null?th:dh+((((th-dh)%360)+540)%360-180)*.12;
  if(routeShown!==route){routeShown=route;gl.getSource('route').setData({type:'FeatureCollection',features:route?[{type:'Feature',geometry:{type:'LineString',coordinates:route.map(p=>[p.lon,p.lat])}}]:[]})}
- gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:Z-.5,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:Math.round($('#gl').clientWidth*.1374),right:0}})}
+ gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:ZG,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:Math.round($('#gl').clientWidth*.1374),right:0}})}
 // connectivity (only what iPhone Safari can truly read)
 let pingOK=null,batt=null;
 async function doPing(){try{const r=await fetch('manifest.webmanifest?'+now(),{cache:'no-store'});pingOK=r.ok}catch(e){pingOK=false}}
@@ -423,7 +439,7 @@ function render(){
  {const nb=$('#nvb');if(navInfo){nb.style.display='flex';$('#nvt').textContent='➤ '+navInfo.name+' · '+navInfo.km.toFixed(1)+' km · '+Math.round(navInfo.min)+' min'}else nb.style.display='none'}
  {const bad=glState==='fail',noTiles=glOK?(glErrs>8&&tilesGL===0):(tileFail>6&&!tileOK),t=$('#tmsg');
   t.textContent=noTiles?'Map tiles unavailable (blocked or offline)':'3D map unavailable, using basic map';t.style.display=(noTiles||bad)?'flex':'none';
-  $('#attr').textContent='v14 · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
+  $('#attr').textContent='v15 · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
  $('#tmp').textContent=weather&&now()-weather.at<1800000?Math.round(weather.temperature_2m)+'°C':'--'}
 setInterval(render,300);render();applyBright();loadGL();let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
 </script></body></html>
