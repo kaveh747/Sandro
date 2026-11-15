@@ -165,11 +165,26 @@ button{font:inherit;color:inherit;background:none;border:0}
 #gpsban{bottom:calc(var(--u)*54 + env(safe-area-inset-bottom,0px))}
 @media (orientation:landscape){.cards{grid-template-columns:repeat(4,1fr)}}
 #attr{font-size:calc(var(--u)*9);color:#8793a3}
+/* v14 approved corrections: car marker mid-map, bigger speedometer */
+.carm{left:56.87%;top:62%;width:calc(var(--u)*48);height:calc(var(--u)*74);filter:drop-shadow(0 0 10px #2f8cffaa)}
+#mapbox{perspective-origin:56.87% 62%}#dash #map{left:-43.13%}
+.vl{width:calc(var(--u)*380);background:linear-gradient(90deg,#05080d 0,#05080d 66%,#0000)}
+.hl{top:calc(var(--u)*58);width:calc(var(--u)*230)}
+#dash #spd{font-size:calc(var(--u)*128)}#dash .unit{font-size:calc(var(--u)*16)}
+.rpbox{top:calc(var(--u)*222);width:calc(var(--u)*230)}
+.vb{width:calc(var(--u)*230)}
 </style></head><body>
 
 <div id="top"><div class="tl1"><span data-i="therm"></span><span id="tmp">--</span></div><span id="clk">--:--</span><div class="tr1"><div id="sbar"></div><span id="gpslbl" class="st-wait">GPS</span><span id="gbars"><i></i><i></i><i></i><i></i></span></div></div>
 <section class="page on" id="dash">
- <div id="mapbox"><div id="gl"></div><canvas id="map"></canvas></div><div class="fade"></div><div class="vl"></div><div class="vr"></div><svg class="carm" viewBox="-30 -30 60 60"><polygon points="0,-26 25,22 0,12 -25,22" fill="#2f8cff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg>
+ <div id="mapbox"><div id="gl"></div><canvas id="map"></canvas></div><div class="fade"></div><div class="vl"></div><div class="vr"></div><svg class="carm" viewBox="-30 -46 60 92"><defs><linearGradient id="cbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#c3cad4"/></linearGradient></defs>
+ <ellipse cx="0" cy="6" rx="26" ry="42" fill="#000" opacity=".35"/>
+ <g fill="#0a0d12"><rect x="-21" y="-26" width="5" height="14" rx="2"/><rect x="16" y="-26" width="5" height="14" rx="2"/><rect x="-21" y="12" width="5" height="14" rx="2"/><rect x="16" y="12" width="5" height="14" rx="2"/></g>
+ <rect x="-18" y="-37" width="36" height="74" rx="15" fill="url(#cbg)" stroke="#4aa3ff" stroke-width="1.6"/>
+ <polygon points="-12,-17 12,-17 14,-3 -14,-3" fill="#1b2635"/><rect x="-13" y="-3" width="26" height="22" rx="6" fill="#eef1f5"/><polygon points="-13,20 13,20 11,29 -11,29" fill="#1b2635"/>
+ <rect x="-22" y="-14" width="5" height="7" rx="2" fill="#cfd5de"/><rect x="17" y="-14" width="5" height="7" rx="2" fill="#cfd5de"/>
+ <rect x="-14" y="-36" width="9" height="3" rx="1.5" fill="#fff6c8"/><rect x="5" y="-36" width="9" height="3" rx="1.5" fill="#fff6c8"/>
+ <rect x="-14" y="34" width="9" height="2.5" rx="1" fill="#ff3b30"/><rect x="5" y="34" width="9" height="2.5" rx="1" fill="#ff3b30"/></svg>
  <div class="nvb" id="nvb" style="display:none"><span id="nvt"></span><button id="nvx">&#10005;</button></div>
  <div class="ban tm" id="tmsg" style="display:none">Map tiles unavailable (blocked or offline)</div>
  <div class="hl"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
@@ -306,7 +321,7 @@ const mq=matchMedia('(prefers-color-scheme: dark)');
 function applyBright(){const auto=LS.get('bmode','a')==='a',v=auto?(mq.matches?72:100):LS.get('bman',100);$('#dim').style.opacity=1-v/100;return v}
 if(mq.addEventListener)mq.addEventListener('change',applyBright);
 function openSet(){const auto=LS.get('bmode','a')==='a';
- openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v13</div></div>`);
+ openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v14</div></div>`);
  $('#br').oninput=e=>{LS.set('bmode','m');LS.set('bman',+e.target.value);applyBright()};
  $('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}else if(e.target.id==='ba'){LS.set('bmode','a');openSet()}}}
 let weather=null,wxT=0;
@@ -377,7 +392,7 @@ function updGL(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on?1:0;i
  if(!dpos)dpos={lat:pos.lat,lon:pos.lon};dpos.lat+=(pos.lat-dpos.lat)*.12;dpos.lon+=(pos.lon-dpos.lon)*.12;
  if(heading!=null)dh=dh==null?heading:dh+((((heading-dh)%360)+540)%360-180)*.12;
  if(routeShown!==route){routeShown=route;gl.getSource('route').setData({type:'FeatureCollection',features:route?[{type:'Feature',geometry:{type:'LineString',coordinates:route.map(p=>[p.lon,p.lat])}}]:[]})}
- gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:Z-.5,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:0,right:0}})}
+ gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:Z-.5,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:Math.round($('#gl').clientWidth*.1374),right:0}})}
 // connectivity (only what iPhone Safari can truly read)
 let pingOK=null,batt=null;
 async function doPing(){try{const r=await fetch('manifest.webmanifest?'+now(),{cache:'no-store'});pingOK=r.ok}catch(e){pingOK=false}}
@@ -408,7 +423,7 @@ function render(){
  {const nb=$('#nvb');if(navInfo){nb.style.display='flex';$('#nvt').textContent='➤ '+navInfo.name+' · '+navInfo.km.toFixed(1)+' km · '+Math.round(navInfo.min)+' min'}else nb.style.display='none'}
  {const bad=glState==='fail',noTiles=glOK?(glErrs>8&&tilesGL===0):(tileFail>6&&!tileOK),t=$('#tmsg');
   t.textContent=noTiles?'Map tiles unavailable (blocked or offline)':'3D map unavailable, using basic map';t.style.display=(noTiles||bad)?'flex':'none';
-  $('#attr').textContent='v13 · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
+  $('#attr').textContent='v14 · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
  $('#tmp').textContent=weather&&now()-weather.at<1800000?Math.round(weather.temperature_2m)+'°C':'--'}
 setInterval(render,300);render();applyBright();loadGL();let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
 </script></body></html>
