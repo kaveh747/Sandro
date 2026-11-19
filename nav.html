@@ -30,12 +30,20 @@ button{font:inherit;color:inherit;background:none;border:0}
 #trip button,#pcard button,.sbtn{border-radius:calc(var(--u)*10);padding:calc(var(--u)*7) calc(var(--u)*14);background:#222a35}
 #pgo{background:#1e7bff!important;font-weight:700}#tend{background:#c0392b!important}
 #panel{position:fixed;z-index:9;left:50%;transform:translateX(-50%);top:calc(var(--st) + var(--u)*12);width:min(92%,calc(var(--u)*520));max-height:calc(100% - var(--st) - var(--sb) - var(--u)*24);overflow:auto;display:none;padding:calc(var(--u)*12)}
-#panel .row{display:flex;gap:6px;margin-top:calc(var(--u)*6)}#panel input{flex:1;min-width:0;background:#14181d;color:#fff;border:1px solid #2a3340;border-radius:10px;padding:calc(var(--u)*9);font-size:calc(var(--u)*14)}
-#panel .it{display:block;width:100%;text-align:left;background:#222a35;border-radius:12px;padding:calc(var(--u)*9) calc(var(--u)*12);font-size:calc(var(--u)*12);margin-top:calc(var(--u)*5)}
+#panel .row{display:flex;gap:6px;margin-top:calc(var(--u)*6)}#panel input{flex:1;min-width:0;background:#14181d;color:#fff;border:1px solid #2a3340;border-radius:10px;padding:10px;font-size:16px}
+#panel .it{display:block;width:100%;text-align:left;background:#222a35;border-radius:12px;padding:calc(var(--u)*9) calc(var(--u)*12);font-size:max(13px,calc(var(--u)*12));margin-top:calc(var(--u)*5)}
 #msg{position:fixed;z-index:8;left:50%;top:45%;transform:translate(-50%,-50%);background:#0b121bf2;border:1px solid #233046;border-radius:12px;padding:12px 16px;font-size:calc(var(--u)*13);text-align:center;max-width:80%}
 .car{position:fixed;z-index:4;left:50%;top:62%;width:calc(var(--u)*48);height:calc(var(--u)*74);transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 10px #2f8cffaa)}
 #attr{position:fixed;z-index:3;left:50%;transform:translateX(-50%);bottom:calc(var(--sb) + 1px);font-size:calc(var(--u)*8);color:#7d8998;pointer-events:none;white-space:nowrap}
-.nonav #panel,.nonav #banner,.nonav #trip,.nonav #pcard,.nonav #bsearch,.nonav #bvoice{display:none!important}
+.nonav #panel,.nonav #banner,.nonav #trip,.nonav #pcard,.nonav #bsearch,.nonav #bvoice,.nonav #pill{display:none!important}
+#pill{left:50%;transform:translateX(-50%);top:calc(var(--st) + var(--u)*12);width:calc(var(--u)*220);padding:calc(var(--u)*9) calc(var(--u)*14);display:flex;align-items:center;gap:calc(var(--u)*10);font-size:calc(var(--u)*14);color:#cfd6df}
+#pill svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+#speed{left:calc(var(--sl) + var(--u)*12);bottom:calc(var(--sb) + var(--u)*16);padding:calc(var(--u)*8) calc(var(--u)*14);text-align:center;min-width:calc(var(--u)*92)}
+#speed b{display:block;font-size:calc(var(--u)*46);font-weight:600;line-height:1}#speed span{font-size:calc(var(--u)*11);color:#8a93a1}
+@media (orientation:portrait){:root{--u:calc(100vw/430)}
+ #street{width:calc(var(--u)*250)}#pill{top:auto;bottom:calc(var(--sb) + var(--u)*12);width:calc(var(--u)*406)}
+ #banner{top:auto;bottom:calc(var(--sb) + var(--u)*86);width:calc(var(--u)*406)}#trip,#pcard{width:calc(var(--u)*406)}
+ #speed{bottom:calc(var(--sb) + var(--u)*160)}}
 </style></head><body>
 <div id="gl"></div>
 <svg class="car" viewBox="-30 -46 60 92"><defs><linearGradient id="cbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#c3cad4"/></linearGradient></defs>
@@ -46,6 +54,8 @@ button{font:inherit;color:inherit;background:none;border:0}
  <rect x="-14" y="-36" width="9" height="3" rx="1.5" fill="#fff6c8"/><rect x="5" y="-36" width="9" height="3" rx="1.5" fill="#fff6c8"/>
  <rect x="-14" y="34" width="9" height="2.5" rx="1" fill="#ff3b30"/><rect x="5" y="34" width="9" height="2.5" rx="1" fill="#ff3b30"/></svg>
 
+<button class="card" id="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Where to?</button>
+<div class="card" id="speed"><b id="sv">--</b><span>km/h</span></div>
 <div class="card" id="street"><div class="lbl">YOU ARE ON</div><div id="sname" dir="auto">Waiting for GPS…</div><div id="sub"></div><div id="near"></div></div>
 <div id="tools">
  <button id="bsearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
@@ -57,7 +67,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 <div class="card" id="trip"><div style="flex:1;min-width:0"><div class="lbl">TO</div><b id="tt"></b><div id="ts" style="color:#8a93a1;font-size:.9em"></div></div><button id="tend">End</button></div>
 <div class="card" id="pcard"><div style="flex:1;min-width:0"><div class="lbl">DESTINATION</div><b id="ptxt"></b></div><button id="pgo">Go</button><button id="px">&#10005;</button></div>
 <div class="card" id="panel"><div style="display:flex;justify-content:space-between;align-items:center"><div class="lbl">WHERE TO?</div><button id="pclose" class="sbtn">&#10005;</button></div>
- <div class="row"><input id="nq" placeholder="Address, place, or lat,lon" autocomplete="off"><button id="ng" class="sbtn" style="background:#1e7bff">Search</button></div><div id="nr"></div></div>
+ <div class="row"><input id="nq" placeholder="Address, place, or lat,lon" autocomplete="off" autocorrect="off" inputmode="search" enterkeyhint="search"><button id="ng" class="sbtn" style="background:#1e7bff">Search</button></div><div id="nr"></div></div>
 <div id="msg">Starting…</div>
 <div id="attr">&copy; OpenFreeMap &copy; OpenMapTiles &middot; Data &copy; OpenStreetMap</div>
 
@@ -135,6 +145,8 @@ function frame(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on&&glOK
 let fr=0;(function lp(){if(fr++&1)frame();requestAnimationFrame(lp)})();
 // ---------- UI ----------
 function ui(){const ok=pos&&now()-pos.t<20000&&gpsState==='ok';
+ $('#sv').textContent=ok&&gspeed!=null&&(now()-pos.t<5000||gspeed<1)?Math.round(gspeed):'--';
+ $('#pill').style.display=navOn&&!navInfo&&$('#panel').style.display!=='block'&&$('#pcard').style.display!=='flex'?'flex':'none';
  if(!ok){$('#sname').textContent=gpsState==='err'?'GPS blocked':'Waiting for GPS…';$('#sub').textContent=gpsErr;$('#near').innerHTML='';if(glOK)msg(gpsState==='err'?gpsErr:'Waiting for GPS…');return}
  if(glOK)msg('');
  $('#sname').textContent=streetNow||(glOK?'Off the mapped streets':'Loading map…');
@@ -201,6 +213,7 @@ $('#px').onclick=clearPin;
 $('#pgo').onclick=()=>{if(!pinP)return;const p=pinP;remember(p.n,p.lat,p.lon);startRoute(p.lat,p.lon,p.n)};
 $('#tend').onclick=()=>{endRoute();say('Route ended')};
 // ---------- buttons ----------
+$('#pill').onclick=openPanel;
 $('#bsearch').onclick=()=>$('#panel').style.display==='block'?closePanel():openPanel();
 $('#bnav').onclick=()=>{navOn=!navOn;document.body.classList.toggle('nonav',!navOn);$('#bnav').classList.toggle('on',navOn);
  if(glOK)for(const id of ['route-c','route','dest','dest-halo'])gl.setLayoutProperty(id,'visibility',navOn?'visible':'none');
