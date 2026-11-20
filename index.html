@@ -29,8 +29,8 @@ button{font:inherit;color:inherit;background:none;border:0}
 #trip b,#pcard b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #trip button,#pcard button,.sbtn{border-radius:calc(var(--u)*10);padding:calc(var(--u)*7) calc(var(--u)*14);background:#222a35}
 #pgo{background:#1e7bff!important;font-weight:700}#tend{background:#c0392b!important}
-#panel{position:fixed;z-index:9;left:50%;transform:translateX(-50%);top:calc(var(--st) + var(--u)*12);width:min(92%,calc(var(--u)*520));max-height:calc(100% - var(--st) - var(--sb) - var(--u)*24);overflow:auto;display:none;padding:calc(var(--u)*12)}
-#panel .row{display:flex;gap:6px;margin-top:calc(var(--u)*6)}#panel input{flex:1;min-width:0;background:#14181d;color:#fff;border:1px solid #2a3340;border-radius:10px;padding:10px;font-size:16px}
+#off,#panel{position:fixed;z-index:9;left:50%;transform:translateX(-50%);top:calc(var(--st) + var(--u)*12);width:min(92%,calc(var(--u)*520));max-height:calc(100% - var(--st) - var(--sb) - var(--u)*24);overflow:auto;display:none;padding:calc(var(--u)*12)}
+#off{display:none}#panel .row{display:flex;gap:6px;margin-top:calc(var(--u)*6)}#panel input{flex:1;min-width:0;background:#14181d;color:#fff;border:1px solid #2a3340;border-radius:10px;padding:10px;font-size:16px}
 #panel .it{display:block;width:100%;text-align:left;background:#222a35;border-radius:12px;padding:calc(var(--u)*9) calc(var(--u)*12);font-size:max(13px,calc(var(--u)*12));margin-top:calc(var(--u)*5)}
 #msg{position:fixed;z-index:8;left:50%;top:45%;transform:translate(-50%,-50%);background:#0b121bf2;border:1px solid #233046;border-radius:12px;padding:12px 16px;font-size:calc(var(--u)*13);text-align:center;max-width:80%}
 .car{position:fixed;z-index:4;left:50%;top:62%;width:calc(var(--u)*48);height:calc(var(--u)*74);transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 0 10px #2f8cffaa)}
@@ -44,8 +44,18 @@ button{font:inherit;color:inherit;background:none;border:0}
  #street{width:calc(var(--u)*250)}#pill{top:auto;bottom:calc(var(--sb) + var(--u)*12);width:calc(var(--u)*406)}
  #banner{top:auto;bottom:calc(var(--sb) + var(--u)*86);width:calc(var(--u)*406)}#trip,#pcard{width:calc(var(--u)*406)}
  #speed{bottom:calc(var(--sb) + var(--u)*160)}}
+#left,#lfade{display:none;position:fixed;top:0;bottom:0;z-index:3;pointer-events:auto}
+@media (orientation:landscape){
+ :root{--cx:65%}
+ #left{display:block;left:0;width:30vw;background:radial-gradient(ellipse at 50% 24%,#0b2a5599 0%,#0000 68%),#05080d}
+ #lfade{display:block;left:30vw;width:calc(var(--u)*50);background:linear-gradient(90deg,#05080d,#0000);pointer-events:none}
+ #pill,#banner,#trip,#pcard,#panel,#off,#msg,#attr,.car{left:var(--cx)}
+ #speed{left:calc(var(--sl) + var(--u)*8);top:calc(var(--st) + var(--u)*14);bottom:auto;width:calc(30vw - var(--sl) - var(--u)*16);background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;padding:0}
+ #speed b{font-size:calc(var(--u)*112);font-weight:500}#speed span{font-size:calc(var(--u)*15);color:#c9d1db}
+ #street{left:calc(var(--sl) + var(--u)*14);top:calc(var(--st) + var(--u)*176);width:calc(30vw - var(--sl) - var(--u)*26);background:none;border:0;border-top:1px solid #1d2735;border-radius:0;padding:calc(var(--u)*10) 0 0;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 </style></head><body>
-<div id="gl"></div>
+<div id="gl"></div><div id="left"></div><div id="lfade"></div>
 <svg class="car" viewBox="-30 -46 60 92"><defs><linearGradient id="cbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#c3cad4"/></linearGradient></defs>
  <ellipse cx="0" cy="6" rx="26" ry="42" fill="#000" opacity=".3"/>
  <g fill="#0a0d12"><rect x="-21" y="-26" width="5" height="14" rx="2"/><rect x="16" y="-26" width="5" height="14" rx="2"/><rect x="-21" y="12" width="5" height="14" rx="2"/><rect x="16" y="12" width="5" height="14" rx="2"/></g>
@@ -61,15 +71,24 @@ button{font:inherit;color:inherit;background:none;border:0}
  <button id="bsearch" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
  <button id="bnav" class="on" aria-label="Navigation on/off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 21 3l-8 18-2-8z"/></svg></button>
  <button id="bvoice" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+ <button id="boff" aria-label="Offline maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 11l5 5 5-5M5 21h14"/></svg></button>
  <button id="bzin">+</button><button id="bzout">&minus;</button>
 </div>
 <div class="card" id="banner"><span id="ba" style="display:inline-grid"></span><div id="bt"><span id="bt1"></span><small id="bt2"></small></div></div>
-<div class="card" id="trip"><div style="flex:1;min-width:0"><div class="lbl">TO</div><b id="tt"></b><div id="ts" style="color:#8a93a1;font-size:.9em"></div></div><button id="tend">End</button></div>
+<div class="card" id="trip"><div style="flex:1;min-width:0"><div class="lbl">TO</div><b id="tt"></b><div id="ts" style="color:#8a93a1;font-size:.9em"></div></div><button id="tsave">Save map</button><button id="tend">End</button></div>
 <div class="card" id="pcard"><div style="flex:1;min-width:0"><div class="lbl">DESTINATION</div><b id="ptxt"></b></div><button id="pgo">Go</button><button id="px">&#10005;</button></div>
 <div class="card" id="panel"><div style="display:flex;justify-content:space-between;align-items:center"><div class="lbl">WHERE TO?</div><button id="pclose" class="sbtn">&#10005;</button></div>
- <div class="row"><input id="nq" placeholder="Address, place, or lat,lon" autocomplete="off" autocorrect="off" inputmode="search" enterkeyhint="search"><button id="ng" class="sbtn" style="background:#1e7bff">Search</button></div><div id="nr"></div></div>
+ <div class="row"><input id="nq" placeholder="Address, place, or lat,lon" autocomplete="off" autocorrect="off" inputmode="search" enterkeyhint="search"><button id="ng" class="sbtn" style="background:#1e7bff">Search</button></div><div id="nr"></div><button class="sbtn" id="poff" style="margin-top:8px;background:#222a35">Offline maps</button></div>
+<div class="card" id="off"><div style="display:flex;justify-content:space-between;align-items:center"><div class="lbl">OFFLINE MAPS · download once while online</div><button id="oclose" class="sbtn">&#10005;</button></div>
+ <button class="sbtn" id="o9" style="display:block;width:100%;text-align:left;margin-top:8px;background:#1e7bff">Save the map of my current route</button>
+ <button class="sbtn" id="o1" style="display:block;width:100%;text-align:left;margin-top:6px">Flight corridor Tehran &rarr; Mashhad <small style="color:#8a93a1">low detail</small></button>
+ <button class="sbtn" id="o2" style="display:block;width:100%;text-align:left;margin-top:6px">Road Tehran &rarr; Mashhad <small style="color:#8a93a1">detailed, big</small></button>
+ <button class="sbtn" id="o3" style="display:block;width:100%;text-align:left;margin-top:6px">Around my position <small style="color:#8a93a1">25 km</small></button>
+ <div style="display:flex;gap:6px;margin-top:6px"><button class="sbtn" id="o4">Show Tehran&rarr;Mashhad line</button><button class="sbtn" id="o5" style="background:#222a35">Hide line</button></div>
+ <div style="display:flex;gap:6px;margin-top:6px"><button class="sbtn" id="o6" style="background:#222a35">Cancel download</button><button class="sbtn" id="o7" style="background:#c0392b">Delete offline maps</button><button class="sbtn" id="o8" style="background:#222a35">Activate</button></div>
+ <div id="offst" style="font-size:12px;margin-top:8px;color:#aab4c2"></div><div id="offsw" style="font-size:12px;margin-top:4px;color:#8a93a1"></div><div id="offsz" style="font-size:11px;margin-top:4px;color:#8a93a1"></div></div>
 <div id="msg">Starting…</div>
-<div id="attr">&copy; OpenFreeMap &copy; OpenMapTiles &middot; Data &copy; OpenStreetMap</div>
+<div id="attr">nav v5 &middot; &copy; OpenFreeMap &copy; OpenMapTiles &middot; Data &copy; OpenStreetMap</div>
 
 <script>
 const $=s=>document.querySelector(s),now=()=>Date.now();
@@ -143,7 +162,7 @@ function frame(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on&&glOK
  let th=heading;if(snapT&&heading!=null&&gspeed!=null&&gspeed>5){const a=snapT.brg,b=(a+180)%360,dd=x=>Math.abs(((x-heading)%360+540)%360-180);th=dd(a)<dd(b)?a:b}
  if(th!=null)dh=dh==null?th:dh+((((th-dh)%360)+540)%360-180)*.12;
  if(routeShown!==route){routeShown=route;gl.getSource('route').setData({type:'FeatureCollection',features:route?[{type:'Feature',geometry:{type:'LineString',coordinates:route.map(p=>[p.lon,p.lat])}}]:[]})}
- gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:ZG,padding:{top:Math.round(innerHeight*.24),bottom:0,left:0,right:0}})}
+ gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:ZG,padding:{top:Math.round(innerHeight*.24),bottom:0,left:innerWidth>innerHeight?Math.round(innerWidth*.30):0,right:0}})}
 let fr=0;(function lp(){if(fr++&1)frame();requestAnimationFrame(lp)})();
 // ---------- UI ----------
 function ui(){const ok=pos&&now()-pos.t<20000&&gpsState==='ok';
@@ -193,6 +212,7 @@ function remember(n,la,lo){const l=LS.get('recent',[]).filter(x=>x.n!==n);l.unsh
 let res=[];
 $('#panel').addEventListener('click',async e=>{const t=e.target.closest('button');if(!t)return;
  if(t.id==='pclose')return closePanel();
+ if(t.id==='poff'){closePanel();return openOff()}
  if(t.id==='ng'){const q=$('#nq').value.trim();if(!q)return;const m=q.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
   if(m){const la=+m[1],lo=+m[2],n='Pin '+la.toFixed(4)+', '+lo.toFixed(4);remember(n,la,lo);return startRoute(la,lo,n)}
   $('#nr').innerHTML='<div class="lbl" style="margin-top:8px">SEARCHING…</div>';
@@ -222,5 +242,58 @@ $('#bnav').onclick=()=>{navOn=!navOn;document.body.classList.toggle('nonav',!nav
  if(!navOn){closePanel();clearPin()}else if(navInfo)navTick()};
 $('#bvoice').onclick=()=>{voiceOn=!voiceOn;$('#bvoice').classList.toggle('on',voiceOn);if(voiceOn)say('Voice guidance on');else if(window.speechSynthesis)speechSynthesis.cancel()};
 $('#bzin').onclick=()=>{ZG=Math.min(19.5,ZG+.5)};$('#bzout').onclick=()=>{ZG=Math.max(15,ZG-.5)};
+// ---------- offline maps (service worker sw.js keeps downloaded map files) ----------
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+const TEH={lat:35.6892,lon:51.3890},MHD={lat:36.2605,lon:59.6168};let offBusy=false,offCancel=false;
+function gcPts(a,b,n){const r=Math.PI/180,la1=a.lat*r,lo1=a.lon*r,la2=b.lat*r,lo2=b.lon*r,d=2*Math.asin(Math.sqrt(Math.sin((la2-la1)/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin((lo2-lo1)/2)**2)),o=[];
+ for(let i=0;i<=n;i++){const f=i/n,A=Math.sin((1-f)*d)/Math.sin(d),B=Math.sin(f*d)/Math.sin(d),x=A*Math.cos(la1)*Math.cos(lo1)+B*Math.cos(la2)*Math.cos(lo2),y=A*Math.cos(la1)*Math.sin(lo1)+B*Math.cos(la2)*Math.sin(lo2),z=A*Math.sin(la1)+B*Math.sin(la2);o.push({lat:Math.atan2(z,Math.hypot(x,y))/r,lon:Math.atan2(y,x)/r})}return o}
+function tileXY(lon,lat,z){const n=2**z,r=lat*Math.PI/180,x=Math.floor((lon+180)/360*n),y=Math.floor((1-Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*n);return[Math.max(0,Math.min(n-1,x)),Math.max(0,Math.min(n-1,y))]}
+function densify(pts,stepKm){const o=[pts[0]];for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i],n=Math.max(1,Math.ceil(hav(a,b)/1000/stepKm));for(let k=1;k<=n;k++)o.push({lat:a.lat+(b.lat-a.lat)*k/n,lon:a.lon+(b.lon-a.lon)*k/n})}return o}
+function tilesFor(groups){const set=new Set();for(const [pts,plan] of groups)for(const [z,buf] of plan){const n=2**z,tk=40075*Math.cos(36*Math.PI/180)/n,rad=Math.ceil(buf/tk);
+  for(const p of densify(pts,Math.max(.5,tk*.7))){const [cx,cy]=tileXY(p.lon,p.lat,z);for(let dx=-rad;dx<=rad;dx++)for(let dy=-rad;dy<=rad;dy++){const x=cx+dx,y=cy+dy;if(x>=0&&y>=0&&x<n&&y<n)set.add(z+'/'+x+'/'+y)}}}return set}
+const PLAN_FLIGHT=[[3,300],[4,250],[5,200],[6,150],[7,100],[8,80],[9,60],[10,40]],PLAN_AIRPORT=[[11,25],[12,15]],
+ PLAN_ROAD=[[5,60],[6,50],[7,40],[8,30],[9,20],[10,12],[11,8],[12,5],[13,3],[14,2]],PLAN_ROUTE=[[7,40],[8,30],[9,20],[10,12],[11,8],[12,5],[13,3],[14,2]],PLAN_AROUND=[[8,40],[9,30],[10,25],[11,20],[12,15],[13,12],[14,10]];
+async function swCheck(act){
+ if(!('serviceWorker' in navigator))return 'NO. This view cannot store offline files (in-app browser or private tab). Open the page in normal Safari.';
+ try{const r=await fetch('sw.js',{cache:'no-store'});if(!r.ok)return 'NO. The file sw.js was not found (HTTP '+r.status+'). Upload sw.js next to nav.html in GitHub.'}catch(e){return 'NO. Cannot reach sw.js (offline or blocked).'}
+ let reg=await navigator.serviceWorker.getRegistration();
+ if(!reg&&act){try{reg=await navigator.serviceWorker.register('sw.js')}catch(e){return 'NO. Registering failed: '+(e&&e.message||e)}}
+ if(!reg)return 'NOT YET. Tap Activate.';
+ if(act){try{await navigator.serviceWorker.ready}catch(e){}}
+ if(navigator.serviceWorker.controller)return 'ACTIVE \u2713';
+ return 'WAIT. Installed but not controlling this page yet. Tap Activate (the page reloads once).'}
+async function offlineGet(name,groups){if(offBusy)return;const out=$('#offst');
+ {const sw=await swCheck(true);if(sw.indexOf('ACTIVE')!==0){out.textContent='Offline storage: '+sw;return}}
+ offBusy=true;offCancel=false;
+ try{out.textContent='Preparing…';
+  const st=await (await fetch('https://tiles.openfreemap.org/styles/liberty')).json();
+  const vs=Object.keys(st.sources).find(k=>st.sources[k].type==='vector');let tpl=(st.sources[vs].tiles||[])[0];
+  if(!tpl){const tj=await (await fetch(st.sources[vs].url)).json();tpl=tj.tiles[0]}
+  const urls=[];if(st.sprite)for(const x of ['.json','.png','@2x.json','@2x.png'])urls.push(st.sprite+x);
+  const fonts=new Set();for(const l of st.layers){const f=l.layout&&l.layout['text-font'];if(Array.isArray(f)&&f.every(q=>typeof q==='string'))fonts.add(f.join(','))}
+  if(st.glyphs)for(const f of fonts)for(const r of ['0-255','256-511','1536-1791','65024-65279'])urls.push(st.glyphs.replace('{fontstack}',f).replace('{range}',r));
+  const tiles=[...tilesFor(groups)].map(k=>{const q=k.split('/');return tpl.replace('{z}',q[0]).replace('{x}',q[1]).replace('{y}',q[2])});
+  const all=urls.concat(tiles);let done=0,fail=0,i=0;out.textContent='Starting: '+all.length+' files…';
+  const worker=async()=>{while(i<all.length&&!offCancel){const u=all[i++];try{const r=await fetch(u);if(!r.ok)fail++}catch(e){fail++}done++;if(done%10===0||done===all.length)out.textContent='Downloading '+name+': '+done+' / '+all.length+(fail?' ('+fail+' failed)':'')}};
+  await Promise.all([worker(),worker(),worker(),worker(),worker(),worker()]);
+  out.textContent=offCancel?'Cancelled. What was downloaded is kept.':'Done: '+(all.length-fail)+' of '+all.length+' files saved for offline use.'}
+ catch(e){out.textContent='Download failed (needs internet): '+(e&&e.message||e)}
+ offBusy=false}
+function openOff(){$('#off').style.display='block';swCheck(false).then(t=>{$('#offsw').textContent='Offline storage: '+t});
+ if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(e=>{$('#offsz').textContent='Phone storage used by this site: '+Math.round(e.usage/1048576)+' MB'})}
+$('#boff').onclick=()=>$('#off').style.display==='block'?($('#off').style.display='none'):openOff();
+$('#tsave').onclick=()=>{openOff();if(route&&route.length)offlineGet('this route',[[route,PLAN_ROUTE]])};
+$('#off').addEventListener('click',async e=>{const id=e.target.id,out=$('#offst');
+ if(id==='oclose')$('#off').style.display='none';
+ else if(id==='o9'){if(route&&route.length)offlineGet('this route',[[route,PLAN_ROUTE]]);else out.textContent='First choose a destination (Where to?), then tap this button.'}
+ else if(id==='o1')offlineGet('flight corridor',[[gcPts(TEH,MHD,60),PLAN_FLIGHT],[[TEH,MHD],PLAN_AIRPORT]]);
+ else if(id==='o2'){try{out.textContent='Getting the road route…';const j=await (await fetch('https://router.project-osrm.org/route/v1/driving/'+TEH.lon+','+TEH.lat+';'+MHD.lon+','+MHD.lat+'?overview=simplified&geometries=geojson')).json();
+   offlineGet('road',[[j.routes[0].geometry.coordinates.map(c=>({lat:c[1],lon:c[0]})),PLAN_ROAD]])}catch(er){out.textContent='Could not get the route (needs internet).'}}
+ else if(id==='o3'){if(!pos)out.textContent='Waiting for GPS position…';else offlineGet('around you',[[[{lat:pos.lat,lon:pos.lon}],PLAN_AROUND]])}
+ else if(id==='o4'){route=gcPts(TEH,MHD,100);out.textContent='Line shown on the moving map.'}
+ else if(id==='o5'){route=null;out.textContent='Line hidden.'}
+ else if(id==='o6')offCancel=true;
+ else if(id==='o7'){try{await caches.delete('sandero-v1');out.textContent='Offline maps deleted.'}catch(er){out.textContent='Could not delete.'}}
+ else if(id==='o8'){const z=$('#offsw');z.textContent='Checking…';const t=await swCheck(true);z.textContent='Offline storage: '+t;if(t.indexOf('WAIT')===0)setTimeout(()=>location.reload(),900)}});
 startGPS();loadGL();
 </script></body></html>

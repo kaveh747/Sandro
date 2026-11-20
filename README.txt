@@ -1,8 +1,4 @@
-Smart Navigator - one window: colourful moving map (English), destination search, voice guidance,
-tap-on-map destination, current street + nearby streets. The navigation buttons can be switched off.
-
-Upload to GitHub Pages:
- A) Same repo as before (sandero): Add file > Upload files > nav.html > Commit.
-    Open: https://YOUR-USERNAME.github.io/sandero/nav.html
- B) New repo: upload index.html, enable Pages (Settings > Pages > main / root).
-Open it in Safari on the iPhone, allow Location. Needs internet for the map.
+Smart Navigator v5 - upload nav.html AND sw.js to the same GitHub folder.
+Open: https://YOUR-USERNAME.github.io/Sandro/nav.html?v=5
+Offline maps: tap the download arrow button (right column), or "Save map" on the route card.
+Offline only works in normal Safari / Home Screen icon. Reload the page once after the first visit.
