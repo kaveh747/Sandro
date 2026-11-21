@@ -329,8 +329,9 @@ $('#sbar').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+
  const c=['st-ok','st-wait','st-err','st-unk'].find(c=>b.classList.contains(c));
  toast(sb[i][0]+': '+(window.NATIVE?{'st-ok':'connected','st-wait':'not connected','st-err':'error','st-unk':'unknown'}[c]:{'st-ok':'connected','st-wait':'not connected, or not confirmed (iPhone Safari cannot read this status)','st-err':'error','st-unk':'unknown (iPhone Safari cannot read this)'}[c])+(DET[i]?' · '+DET[i]:''))};
 // GPS
+let bridgeRole='local';
 let gpsT=0,gpsErr='',pos=null,heading=null,gspeed=null,gpsState='off',watch=null,trail=[],off={x:0,y:0};
-function startGPS(){if(window.NATIVE){if(gpsState==='off')gpsState='wait';gpsT=now();return}if(!navigator.geolocation){gpsState='err';gpsErr='GPS not supported';return}
+function startGPS(){if(bridgeRole==='remote')return;if(window.NATIVE){if(gpsState==='off')gpsState='wait';gpsT=now();return}if(!navigator.geolocation){gpsState='err';gpsErr='GPS not supported';return}
  gpsState='wait';gpsT=now();if(watch!=null)navigator.geolocation.clearWatch(watch);
  watch=navigator.geolocation.watchPosition(p=>{const c=p.coords;gpsState='ok';gpsErr='';pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,t:now()};
   gspeed=c.speed!=null&&c.speed>=0?c.speed*3.6:null;heading=(c.heading!=null&&!isNaN(c.heading)&&(c.speed||0)>1.5)?c.heading:heading;
@@ -604,8 +605,8 @@ function netUpdate(){const c=navigator.connection,t=c&&c.type;
  cls($('#sb3'),pingOK===true?'ok':'wait');cls($('#sb4'),'ok')}
 document.addEventListener('pointerdown',()=>{const el=document.documentElement,f=el.requestFullscreen||el.webkitRequestFullscreen;if(f&&!document.fullscreenElement)try{const q=f.call(el);q&&q.catch&&q.catch(()=>{})}catch(e){}},{once:true});
 startGPS();
-setInterval(()=>{if(gpsState!=='err'&&(!pos||now()-pos.t>15000)&&now()-gpsT>12000)startGPS()},5000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&gpsState!=='err')startGPS()});
+setInterval(()=>{if(bridgeRole!=='remote'&&gpsState!=='err'&&(!pos||now()-pos.t>15000)&&now()-gpsT>12000)startGPS()},5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&bridgeRole!=='remote'&&gpsState!=='err')startGPS()});
 // render
 function render(){
  const age=pos?now()-pos.t:1e9,gOk=pos&&age<20000&&gpsState==='ok',sp=gOk&&gspeed!=null&&(age<5000||gspeed<1)?Math.round(gspeed):null;
@@ -628,4 +629,44 @@ function render(){
  $('#tmp').textContent=weather&&now()-weather.at<1800000?Math.round(weather.temperature_2m)+'°C':'--'}
 setInterval(render,300);render();applyBright();loadGL();$('#rseg').innerHTML='<i></i>'.repeat(14);[...$('#rseg').children].slice(-2).forEach(e=>e.classList.add('red'));
 let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
+
+// ===== Two-device bridge (iPhone = host, HP tablet = touch display) =====
+(()=>{
+ const css=`#sbx{position:fixed;z-index:90;right:8px;top:30px;font:14px Arial,sans-serif;color:#fff}#sbx>button{background:#245da8;border:1px solid #6ca5ef;border-radius:9px;padding:7px 10px;color:#fff;font-weight:600}#sbpanel{display:none;position:fixed;z-index:91;inset:8% 8%;background:#101820;border:1px solid #52677e;border-radius:16px;padding:18px;color:#fff;box-shadow:0 10px 40px #000c;overflow:auto}#sbpanel h3{font-size:18px;margin:4px 0 12px}#sbpanel p{font-size:13px;color:#c6d0dc;line-height:1.5;margin:8px 0}#sbpanel input{width:100%;padding:12px;border-radius:9px;background:#080d13;color:#fff;border:1px solid #52677e;font-size:16px;margin:8px 0}#sbpanel button{background:#245da8;color:#fff;border:0;border-radius:9px;padding:11px 14px;margin:5px 4px 5px 0;font-size:14px}#sbpanel button.secondary{background:#35404d}#sbstatus{padding:10px;background:#080d13;border-radius:9px;word-break:break-word;font-size:13px;margin:10px 0}#sbcode{font-size:22px;letter-spacing:2px;color:#8bc1ff;word-break:break-all}`;
+ const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+ const wrap=document.createElement('div');wrap.id='sbx';wrap.innerHTML='<button id="sbopen">ارتباط دوطرفه</button>';
+ const panel=document.createElement('div');panel.id='sbpanel';panel.innerHTML='<h3>ارتباط آیفون و نمایشگر HP</h3><p>آیفون را به‌عنوان دستگاه اصلی انتخاب کنید. روی تبلت، گزینه نمایشگر را انتخاب کرده و کد آیفون را وارد کنید. هر دو دستگاه باید به یک هات‌اسپات متصل باشند.</p><button id="sbhost">این دستگاه آیفون اصلی است</button><button id="sbclient">این دستگاه نمایشگر تبلت است</button><div id="sbstatus">وضعیت: قطع</div><div id="sbhostbox" style="display:none"><p>این کد را در تبلت وارد کنید:</p><div id="sbcode"></div><button id="sbcopy">کپی کد</button></div><div id="sbclientbox" style="display:none"><p>کد نمایش‌داده‌شده روی آیفون را وارد کنید:</p><input id="sbpeerid" placeholder="کد اتصال آیفون" autocomplete="off"><button id="sbconnect">اتصال به آیفون</button></div><button class="secondary" id="sbclose">بستن</button><button class="secondary" id="sbdisconnect">قطع اتصال</button>';
+ document.body.append(wrap,panel);
+ const $b=id=>document.getElementById(id);let peer=null,conn=null,role='local',lastState=0,activePointer=null;
+ function status(t){$b('sbstatus').textContent='وضعیت: '+t}
+ function loadPeer(){return new Promise((resolve,reject)=>{if(window.Peer)return resolve();const x=document.createElement('script');x.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';x.onload=()=>window.Peer?resolve():reject(Error('PeerJS unavailable'));x.onerror=()=>reject(Error('بارگذاری کتابخانه ارتباطی ناموفق بود'));document.head.appendChild(x)})}
+ function show(){panel.style.display='block'}function hide(){panel.style.display='none'}
+ $b('sbopen').onclick=show;$b('sbclose').onclick=hide;
+ function disconnect(){try{if(conn)conn.close();if(peer)peer.destroy()}catch(e){}conn=null;peer=null;role='local';bridgeRole='local';if(watch==null&&gpsState!=='err')startGPS();status('قطع اتصال')}
+ $b('sbdisconnect').onclick=disconnect;
+ $b('sbhost').onclick=async()=>{try{disconnect();await loadPeer();role='host';bridgeRole='host';status('در حال ساخت کد آیفون…');peer=new Peer();peer.on('open',id=>{$b('sbcode').textContent=id;$b('sbhostbox').style.display='block';$b('sbclientbox').style.display='none';status('آیفون آماده اتصال است')});peer.on('connection',c=>{if(conn)conn.close();conn=c;wire();status('تبلت متصل شد')});peer.on('error',e=>status('خطا: '+e.message))}catch(e){status(e.message)}};
+ $b('sbclient').onclick=()=>{$b('sbclientbox').style.display='block';$b('sbhostbox').style.display='none';status('کد آیفون را وارد کنید')};
+ $b('sbconnect').onclick=async()=>{try{disconnect();const id=$b('sbpeerid').value.trim();if(!id)return status('کد آیفون وارد نشده است');await loadPeer();role='client';bridgeRole='remote';if(watch!=null){navigator.geolocation.clearWatch(watch);watch=null}gpsState='wait';gpsErr='دریافت GPS از آیفون';peer=new Peer();peer.on('open',()=>{conn=peer.connect(id,{reliable:true});wire();status('در حال اتصال به آیفون…')});peer.on('error',e=>status('خطا: '+e.message))}catch(e){status(e.message)}};
+ $b('sbcopy').onclick=()=>{const t=$b('sbcode').textContent;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>status('کد کپی شد')).catch(()=>status('کد را دستی یادداشت کنید'));else status('کد را دستی یادداشت کنید')};
+ function wire(){if(!conn)return;conn.on('open',()=>{status(role==='host'?'آیفون و تبلت متصل‌اند':'به آیفون متصل شد');if(role==='client')conn.send({type:'hello'});});conn.on('data',m=>{if(role==='host')receiveOnHost(m);else receiveOnClient(m)});conn.on('close',()=>status('ارتباط قطع شد'));conn.on('error',e=>status('خطای ارتباط: '+e.message))}
+ function send(m){if(conn&&conn.open)try{conn.send(m)}catch(e){}}
+ function snapshot(){const vals={};['rpm','cool','oil','bat','gear','fuel'].forEach(k=>vals[k]=live(k));let cam=null;try{if(gl&&glOK){const c=gl.getCenter();cam={lat:c.lat,lon:c.lng,zoom:gl.getZoom(),bearing:gl.getBearing(),pitch:gl.getPitch()}}}catch(e){}return {type:'state',page:cur,pos:pos?{lat:pos.lat,lon:pos.lon,acc:pos.acc,t:pos.t}:null,gpsState,gpsErr,gspeed,heading,vals,cam,zoom:Z,dest:navDest||null,route:route&&route.length<1500?route:null,navInfo:navInfo||null,at:Date.now()}}
+ setInterval(()=>{if(role==='host'&&conn&&conn.open){const t=Date.now();if(t-lastState>500){lastState=t;send(snapshot())}}},300);
+ function receiveOnClient(m){if(!m||typeof m!=='object')return;if(m.type==='state'){if(m.pos){pos=m.pos;pos.t=Date.now()}else pos=null;gpsState=m.gpsState||'wait';gpsErr=m.gpsErr||'';gspeed=m.gspeed;heading=m.heading;Object.keys(m.vals||{}).forEach(k=>{if(store[k])store[k]={v:m.vals[k],t:now()}});if(m.page&&['dash','launch','info'].includes(m.page)&&cur!==m.page)go(m.page);if(m.zoom)Z=m.zoom;if(m.dest)navDest=m.dest;if(m.route)route=m.route;if(m.navInfo)navInfo=m.navInfo;if(m.cam&&gl&&glOK){try{gl.jumpTo({center:[m.cam.lon,m.cam.lat],zoom:m.cam.zoom,bearing:m.cam.bearing,pitch:m.cam.pitch})}catch(e){}}render();return}}
+ function receiveOnHost(m){if(!m||typeof m!=='object')return;if(m.type==='touch'){const x=Math.max(0,Math.min(innerWidth,m.x*innerWidth)),y=Math.max(0,Math.min(innerHeight,m.y*innerHeight));let target=(m.phase!=='down'&&activePointer&&activePointer.target)||document.elementFromPoint(x,y)||document.body;const ev=(type)=>{try{target.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,clientX:x,clientY:y,pointerId:m.id||1,pointerType:'touch',isPrimary:true,buttons:type==='pointerup'?0:1}))}catch(e){}};if(m.phase==='down'){activePointer={x,y,target,time:Date.now()};ev('pointerdown')}else if(m.phase==='move'){ev('pointermove')}else if(m.phase==='up'){ev('pointerup');if(activePointer&&Math.hypot(x-activePointer.x,y-activePointer.y)<12&&Date.now()-activePointer.time<900){try{target.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,clientX:x,clientY:y,view:window}))}catch(e){}}activePointer=null}return}
+  if(m.type==='input'&&m.id){const el=document.getElementById(m.id);if(el&&('value'in el)){el.value=m.value;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));return}}
+  if(m.type==='focus'&&m.id){const el=document.getElementById(m.id);if(el&&el.focus)el.focus();return}
+  if(m.type==='key'&&m.id){const el=document.getElementById(m.id);if(el){el.dispatchEvent(new KeyboardEvent('keydown',{key:m.key,bubbles:true,cancelable:true}));if(m.key==='Enter')el.dispatchEvent(new KeyboardEvent('keyup',{key:m.key,bubbles:true}))}}}
+ // Relay touchscreen gestures from tablet to iPhone. Panel controls remain local.
+ function inPanel(e){return !!(e.target&&e.target.closest&&e.target.closest('#sbpanel,#sbx'))}
+ if(role!=='host'){
+  document.addEventListener('pointerdown',e=>{if(role!=='client'||inPanel(e))return;const el=e.target;if(el.matches&&el.matches('input,textarea,select')){if(el.id)send({type:'focus',id:el.id});return}e.preventDefault();e.stopImmediatePropagation();activePointer={x:e.clientX,y:e.clientY,id:e.pointerId};send({type:'touch',phase:'down',x:e.clientX/innerWidth,y:e.clientY/innerHeight,id:e.pointerId})},{capture:true});
+  document.addEventListener('pointermove',e=>{if(role!=='client'||!activePointer||inPanel(e))return;e.preventDefault();e.stopImmediatePropagation();send({type:'touch',phase:'move',x:e.clientX/innerWidth,y:e.clientY/innerHeight,id:e.pointerId})},{capture:true});
+  document.addEventListener('pointerup',e=>{if(role!=='client'||!activePointer||inPanel(e))return;e.preventDefault();e.stopImmediatePropagation();send({type:'touch',phase:'up',x:e.clientX/innerWidth,y:e.clientY/innerHeight,id:e.pointerId});activePointer=null},{capture:true});
+  document.addEventListener('click',e=>{if(role!=='client'||inPanel(e))return;e.preventDefault();e.stopImmediatePropagation()},true);
+  document.addEventListener('input',e=>{if(role!=='client'||inPanel(e))return;const el=e.target;if(el&&el.id&&('value'in el))send({type:'input',id:el.id,value:el.value})},true);
+  document.addEventListener('keydown',e=>{if(role!=='client'||inPanel(e)||!e.target||!e.target.id)return;if(e.key==='Enter'||e.key==='Escape')send({type:'key',id:e.target.id,key:e.key})},true);
+ }
+})();
+
 </script></body></html>
