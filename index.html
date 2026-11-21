@@ -181,9 +181,44 @@ button{font:inherit;color:inherit;background:none;border:0}
 .pill b{font-size:calc(var(--u)*14);font-weight:700;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pill small{font-size:calc(var(--u)*10);color:#8a93a1;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mc .fc svg{width:55%;height:55%}#bvoice.on{color:#34c759;border-color:#34c759}
+/* v23: reference-image style, hidden destination drawer, back buttons */
+#clk{position:static;transform:none;font-size:calc(var(--u)*14);font-weight:600}
+#mapbox{background:linear-gradient(#5f9de6 0%,#cfe4f8 42%,#cfe4f8 100%)}
+.fade{height:28%;background:linear-gradient(#cfe4f8d9,#cfe4f800)}
+.vl{width:calc(var(--u)*380);background:linear-gradient(90deg,#05080dee 0,#05080dd1 60%,#0000)}
+.vr{width:calc(var(--u)*160);background:linear-gradient(270deg,#05080db3,#0000)}
+#dash #spd{font-size:calc(var(--u)*130);font-style:italic}.hl{top:calc(var(--u)*50)}
+.rpbox{border-top:0;top:calc(var(--u)*236);width:calc(var(--u)*330);padding-top:0}
+.rpbox .lbl{font-size:calc(var(--u)*12);color:#e4eaf2;letter-spacing:0}
+.rrow{display:flex;align-items:center;gap:calc(var(--u)*12);margin-top:calc(var(--u)*8)}.rseg{display:flex;gap:calc(var(--u)*3.4)}
+.rseg i{display:block;width:calc(var(--u)*11);height:calc(var(--u)*10);border-radius:calc(var(--u)*2);background:#3a4452}.rseg i.on{background:#2f8cff}.rseg i.red.on{background:#ff3b30}
+.rv b{font-size:calc(var(--u)*17);font-weight:500}.rv small{font-size:calc(var(--u)*11);color:#9aa6b6;margin-left:3px}
+.pill{background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;pointer-events:none;text-shadow:0 1px 4px #000c}
+.nvb{width:calc(var(--u)*232);min-height:calc(var(--u)*58);background:#1d4ed8f5;border:1.5px solid #6ea0ff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*8) calc(var(--u)*12)}
+#nvt{font-size:calc(var(--u)*24)!important;font-weight:700}#nvs{color:#dbe6ff!important;font-size:calc(var(--u)*13)!important}
+#tband{position:absolute;left:0;right:0;bottom:0;height:calc(var(--u)*58 + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,#05080dee,#05080d8a);pointer-events:none}
+#ti{position:absolute;left:56.87%;transform:translateX(-50%);bottom:calc(var(--u)*17 + env(safe-area-inset-bottom,0px));align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*16);white-space:nowrap;pointer-events:none}
+#ti svg{width:calc(var(--u)*22);height:calc(var(--u)*22);display:block}#ti b{font-weight:500}#ti i{width:1px;height:calc(var(--u)*28);background:#ffffff55}
+#gpsban{bottom:calc(var(--u)*66 + env(safe-area-inset-bottom,0px))}.pcard{bottom:calc(var(--u)*66 + env(safe-area-inset-bottom,0px))}
+#dtab{position:absolute;right:0;top:calc(var(--u)*150);width:calc(var(--u)*28);height:calc(var(--u)*56);border-radius:calc(var(--u)*14) 0 0 calc(var(--u)*14);background:#0b121bcc;border:1px solid #233046;border-right:0;display:grid;place-items:center;color:#cfd6df;z-index:9}
+#dtab svg{width:calc(var(--u)*16);height:calc(var(--u)*16)}.dopen #dtab{display:none}
+#drawer{position:absolute;top:0;bottom:0;right:0;width:calc(var(--u)*304 + var(--sr,0px));padding:calc(env(safe-area-inset-top,0px) + var(--u)*34) calc(env(safe-area-inset-right,0px) + var(--u)*14) calc(env(safe-area-inset-bottom,0px) + var(--u)*12) calc(var(--u)*16);background:#0b121bf2;border-left:1px solid #233046;transform:translateX(105%);transition:transform .25s ease;z-index:12;overflow:auto;-webkit-overflow-scrolling:touch}
+#drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center}.dh button{width:calc(var(--u)*30);height:calc(var(--u)*30);border-radius:50%;background:#222a35}
+.dsr{display:flex;gap:6px;margin-top:calc(var(--u)*10)}.dsr input{flex:1;min-width:0;background:#14181d;color:#fff;border:1px solid #2a3340;border-radius:10px;padding:10px;font-size:16px}.dsr button{background:#1e7bff;border-radius:10px;padding:0 14px;font-weight:700}
+.di{display:block;width:100%;text-align:left;background:#222a35;border-radius:10px;padding:calc(var(--u)*10) calc(var(--u)*12);margin-top:6px;font-size:max(13px,calc(var(--u)*12))}
+.dtip{font-size:calc(var(--u)*10.5);color:#8a93a1;margin-top:10px;line-height:1.4}#doff{margin-top:10px;background:#222a35;border-radius:10px;padding:8px 14px;font-size:calc(var(--u)*11)}
+.hd2 button{background:#1e7bff!important;font-weight:700;height:calc(var(--u)*28);padding:0 calc(var(--u)*16)}
+.hd button.bk{background:#1e7bff;font-weight:700;font-size:12px}.hd button.bk2{background:#222a35;border-radius:12px;padding:8px 14px;font-weight:600;font-size:12px}
+/* v24: look of the reference image - blue direction sign, sky, italic speed */
+.nvb{background:#1d4ed8f2;border:1.5px solid #6ea0ff;width:calc(var(--u)*250)}
+.nvb small{color:#dbe6ff!important}
+#gl{background:linear-gradient(#5f9de6 0,#cfe4f8 26%)}
+.fade{background:linear-gradient(#6aa5ea 0,#cfe4f8cc 45%,#cfe4f800 100%)}
+#spd{font-style:italic}
 </style></head><body>
 
-<div id="top"><div class="tl1"><span data-i="therm"></span><span id="tmp">--</span></div><span id="clk">--:--</span><div class="tr1"><div id="sbar"></div><span id="gpslbl" class="st-wait">GPS</span><span id="gbars"><i></i><i></i><i></i><i></i></span></div></div>
+<div id="top"><div class="tl1"><span id="clk">--:--</span></div><div class="tr1"><div id="sbar"></div><span id="gpslbl" class="st-wait">GPS</span><span id="gbars"><i></i><i></i><i></i><i></i></span><span class="tl1"><span data-i="therm"></span><span id="tmp">--</span></span></div></div>
 <section class="page on" id="dash">
  <div id="mapbox"><div id="gl"></div><canvas id="map"></canvas></div><div class="fade"></div><div class="vl"></div><div class="vr"></div><svg class="carm" viewBox="-30 -46 60 92"><defs><linearGradient id="cbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#c3cad4"/></linearGradient></defs>
  <ellipse cx="0" cy="6" rx="26" ry="42" fill="#000" opacity=".35"/>
@@ -198,14 +233,19 @@ button{font:inherit;color:inherit;background:none;border:0}
  <div class="pcard" id="pcard" style="display:none"><div style="flex:1;min-width:0"><small>DESTINATION</small><b id="ptxt"></b></div><button id="pgo">Go</button><button id="px">&#10005;</button></div>
  <div class="ban tm" id="tmsg" style="display:none">Map tiles unavailable (blocked or offline)</div>
  <div class="hl"><div id="spd" class="val">--</div><div class="unit">km/h</div></div>
- <div class="rpbox"><div class="rr"><span class="lbl">RPM</span><span class="rv"><b id="rpm" class="val">--</b><small>rpm</small></span></div>
-  <div class="rpmbar"><div id="rpmfill"></div></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+ <div class="rpbox"><span class="lbl">RPM</span><div class="rrow"><div class="rseg" id="rseg"></div><span class="rv"><b id="rpm" class="val">--</b><small>x1000</small></span></div></div>
  <div class="hr"><div class="gearbox"><b id="gear" class="val">--</b><span hidden><i id="gP"></i><i id="gR"></i><i id="gN"></i><i id="gD"></i></span></div>
   </div>
+ <button id="dtab" aria-label="Where to?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+ <div id="drawer"><div class="dh"><span class="lbl">WHERE TO?</span><button id="dx" aria-label="Close">&#10005;</button></div>
+  <div class="dsr"><input id="dq" placeholder="Address, place, or lat,lon" autocomplete="off" autocorrect="off" inputmode="search" enterkeyhint="search"><button id="dg">Search</button></div>
+  <div id="dr"></div><p class="dtip">Tip: you can also tap any point on the map to choose it. Tap &#10005; to close and see the full road again.</p><button id="doff">Offline maps</button></div>
  <div id="attr">&copy; OpenFreeMap &copy; OpenMapTiles &middot; Data &copy; OpenStreetMap</div>
  <div class="mc"><button class="fc" id="bvoice" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><button class="fc" id="zin">+</button><button class="fc" id="zout">&minus;</button></div>
  <div class="ban" id="gpsban"><span id="gpsmsg" class="val">GPS: not connected</span><button id="conn">Connect GPS</button></div>
 
+ <div id="tband"></div>
+ <div id="ti" style="display:none"><span data-i="flag"></span><b id="ti_n">Destination</b><i></i><span data-i="clock"></span><b id="ti_m">-- min</b><i></i><b id="ti_k">-- km</b></div>
  <button class="vb st-wait" id="vbtn" data-go="info" aria-label="Vehicle status"><span data-i="car"></span><b>VEHICLE STATUS</b></button>
  <button class="ab" data-go="launch" aria-label="Apps"><span data-i="grid"></span></button>
 </section>
@@ -217,7 +257,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 </section>
 
 <section class="page" id="info">
- <div class="hd"><button data-go="back">&#9664;</button><h1>اطلاعات خودرو<small>VEHICLE STATUS</small></h1><span class="chip st-wait" id="obdchip">OBD2: not connected</span></div>
+ <div class="hd"><button data-go="dash" class="bk">&#9664; DASHBOARD</button><h1>اطلاعات خودرو<small>VEHICLE STATUS</small></h1><span class="chip st-wait" id="obdchip">OBD2: not connected</span><button data-go="launch" class="bk2">&#9638; APPS</button></div>
  <div class="cards">
   <div class="cd st-wait" id="c_cool"><span data-i="therm"></span><small>ENGINE COOLANT</small><b id="i_cool">--</b><small>&deg;C</small></div>
   <div class="cd st-wait" id="c_oil"><span data-i="oil"></span><small>ENGINE OIL</small><b id="i_oil">--</b><small>&deg;C</small></div>
@@ -251,7 +291,7 @@ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.
 batt:'<rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/>',pin:'<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/>',
 therm:'<path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/>',oil:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5S12.5 5 12 2.5C11.5 5 10 7.400 8 9.500 6 11.100 5 13 5 15a7 7 0 0 0 7 7z"/>',
 bat:'<rect x="2" y="7" width="16" height="10" rx="2"/><path d="M22 11v2M6 12h4M8 10v4"/>'};
-Object.assign(P,{fuel:'<rect x="3" y="3" width="10" height="18" rx="2"/><path d="M13 9h2.5a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/><path d="M5.5 7.5h5"/>',vpn:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',car:'<path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/>',ig:'<rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.5 6.5h.01"/>',gm:'<path d="M4 19V6.5L12 13l8-6.5V19"/>',yt:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',gauge:'<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'});
+Object.assign(P,{flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',fuel:'<rect x="3" y="3" width="10" height="18" rx="2"/><path d="M13 9h2.5a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/><path d="M5.5 7.5h5"/>',vpn:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',car:'<path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/>',ig:'<rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><path d="M17.5 6.5h.01"/>',gm:'<path d="M4 19V6.5L12 13l8-6.5V19"/>',yt:'<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',gauge:'<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'});
 const I=(k,s=26)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${P[k]}</svg>`;
 $$('[data-i]').forEach(e=>e.innerHTML=I(e.dataset.i,e.dataset.i==='car'?30:22));
 // data layer: value/time/validity; stale data is never shown as live
@@ -335,7 +375,7 @@ const mq=matchMedia('(prefers-color-scheme: dark)');
 function applyBright(){if(window.NATIVE){$('#dim').style.opacity=0;return NS?Math.round(NS.brightness*100):100}const auto=LS.get('bmode','a')==='a',v=auto?(mq.matches?72:100):LS.get('bman',100);$('#dim').style.opacity=1-v/100;return v}
 if(mq.addEventListener)mq.addEventListener('change',applyBright);
 function openSet(){const auto=LS.get('bmode','a')==='a';
- openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${window.NATIVE?'SYSTEM (real iPhone brightness)':auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button> <button class="sbtn" id="off" style="background:#222a35">Offline maps</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v22</div></div>`);
+ openSheet(`<div style="padding:44px 24px 12px"><div class="lbl">BRIGHTNESS · ${window.NATIVE?'SYSTEM (real iPhone brightness)':auto?'AUTO (follows iPhone Light / Dark mode)':'MANUAL'}</div><input type="range" min="20" max="100" id="br" value="${applyBright()}" style="width:80%;margin:14px 0"><div><button class="sbtn" id="ba">${auto?'Auto is ON':'Use Auto'}</button> <button class="sbtn" id="vc" style="background:#222a35">Change VPN app</button> <button class="sbtn" id="off" style="background:#222a35">Offline maps</button></div><p class="val" style="font-size:11px;margin-top:12px">iPhone does not let web apps read or set the real screen brightness. Auto dims this app a little when the iPhone is in Dark Mode.</p><div class="val" style="margin-top:8px;font-size:11px">Smart Sandero v24</div></div>`);
  $('#br').oninput=e=>{if(window.NATIVE){webkit.messageHandlers.native.postMessage({cmd:'brightness',value:e.target.value/100});return}LS.set('bmode','m');LS.set('bman',+e.target.value);applyBright()};
  $('#shb').onclick=e=>{if(e.target.id==='vc'){LS.set('vpn',null);openVpn()}else if(e.target.id==='ba'){LS.set('bmode','a');openSet()}else if(e.target.id==='off')openOffline()}}
 let weather=null,wxT=0;
@@ -375,8 +415,8 @@ async function startRoute(la,lo,name,silent){if(!pos)return toast('Connect GPS f
   navInfo={name:name.split(',')[0],km:t.distance/1000,min:t.duration/60,dur:t.duration,dist:t.distance,dest:{lat:la,lon:lo}};
   if(!silent){closeSheet();go('dash')}}
  catch(e){if(!silent)toast('Route unavailable (needs internet).')}}
-function navTick(){const nb=$('#nvb');if(!navInfo||!pos||!route){nb.style.display='none';return}
- nb.style.display='flex';
+function navTick(){const nb=$('#nvb');if(!navInfo||!pos||!route){nb.style.display='none';$('#ti').style.display='none';return}
+ nb.style.display='flex';$('#ti').style.display='flex';
  while(stepI<steps.length-1&&hav(pos,steps[stepI+1])<25)stepI++;
  const nx=steps[Math.min(stepI+1,steps.length-1)],dn=hav(pos,nx);let rem=dn;for(let k=stepI+1;k<steps.length;k++)rem+=steps[k].dist;
  const fd=m=>m<1000?Math.max(10,Math.round(m/10)*10)+' m':(m/1000).toFixed(1)+' km';
@@ -385,28 +425,33 @@ function navTick(){const nb=$('#nvb');if(!navInfo||!pos||!route){nb.style.displa
  let txt=TX[nx.mod]||'Continue';if(nx.type==='arrive')txt='Arrive';else if(/roundabout|rotary/.test(nx.type))txt='Roundabout';
  if(!$('#nva').firstChild)$('#nva').innerHTML=I('up',26);
  $('#nva').style.transform='rotate('+(AN[nx.mod]||0)+'deg)';
- $('#nvt').textContent=fd(dn)+' · '+txt;
+ $('#nvt').textContent=fd(dn);
  const road=nx.name&&/^[\x00-\x7F]+$/.test(nx.name)?nx.name+' · ':'';
- $('#nvs').textContent=road+(rem/1000).toFixed(1)+' km · '+Math.max(1,Math.round(navInfo.dur/60*rem/Math.max(1,navInfo.dist)))+' min · '+navInfo.name;
+ $('#nvs').textContent=txt+(road?' · '+road.replace(/ · $/,''):'');
+ $('#ti_n').textContent=navInfo.name;$('#ti_m').textContent=Math.max(1,Math.round(navInfo.dur/60*rem/Math.max(1,navInfo.dist)))+' min';$('#ti_k').textContent=(rem/1000).toFixed(1)+' km';
  {const kk=Math.min(stepI+1,steps.length-1);
   if(dn<450&&dn>150&&!spoken[kk+'f']){spoken[kk+'f']=1;say('In '+Math.round(dn/50)*50+' meters, '+txt.toLowerCase())}
   if(dn<=120&&!spoken[kk+'n']){spoken[kk+'n']=1;say(nx.type==='arrive'?'You have arrived':txt+(road?' onto '+road.replace(/ · $/,''):''))}}
  if(hav(pos,navInfo.dest)<35){say('You have arrived');toast('Arrived');route=null;navInfo=null;clearPin();return}
  let md=1e9;for(const p of route){const d=hav(pos,p);if(d<md)md=d}
  if(md>80){if(!offT)offT=now();else if(now()-offT>10000&&now()-lastRR>20000){lastRR=now();offT=0;say('Rerouting');startRoute(navInfo.dest.lat,navInfo.dest.lon,navInfo.name,true)}}else offT=0}
-function openNav(){const rc=LS.get('recent',[]);
- openSheet(`<div style="padding:48px 20px 12px"><div class="lbl">WHERE TO?</div><div class="addr"><input id="nq" placeholder="Address, place, or lat,lon"><button id="ng">Search</button></div><div><button class="sbtn" id="noff" style="margin-bottom:6px;background:#222a35">Offline maps</button></div><div id="nr">${rc.map((x,i)=>`<div class="row"><button class="grow" data-c="${i}">&#9733; ${esc(x.n)}</button></div>`).join('')}</div></div>`);
- let res=[];
- const go1=async(la,lo,n)=>{const l=LS.get('recent',[]).filter(x=>x.n!==n);l.unshift({n,lat:la,lon:lo});LS.set('recent',l.slice(0,5));navDest={lat:la,lon:lo};await startRoute(la,lo,n)};
- $('#shb').onclick=async e=>{const t=e.target.closest('button');if(!t)return;
-  if(t.id==='ng'){const q=$('#nq').value.trim();if(!q)return;const m=q.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);if(m)return go1(+m[1],+m[2],'Pin '+(+m[1]).toFixed(4)+', '+(+m[2]).toFixed(4));
-   $('#nr').innerHTML='<p class="val">Searching...</p>';
-   try{res=await (await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=en&q='+encodeURIComponent(q))).json();
-    $('#nr').innerHTML=res.map((x,i)=>`<div class="row"><button class="grow" data-r="${i}">${esc(x.display_name)}</button></div>`).join('')||'<p class="val">No results. Try another spelling, or type lat,lon.</p>'}
-   catch(er){$('#nr').innerHTML='<p class="err">Search unavailable (needs internet).</p>'}}
-  else if(t.id==='noff')openOffline();
-  else if(t.dataset.r!=null){const x=res[+t.dataset.r];go1(+x.lat,+x.lon,x.display_name.split(',')[0])}
-  else if(t.dataset.c!=null){const x=rc[+t.dataset.c];go1(x.lat,x.lon,x.n)}}}
+function openDrawer(){$('#drawer').classList.add('open');$('#dash').classList.add('dopen');const rc=LS.get('recent',[]);$('#dr').innerHTML=rc.map((x,i)=>`<button class="di" data-c="${i}">&#9733; ${esc(x.n)}</button>`).join('')}
+function closeDrawer(){$('#drawer').classList.remove('open');$('#dash').classList.remove('dopen');$('#dq').blur()}
+function openNav(){go('dash');openDrawer();setTimeout(()=>$('#dq').focus(),350)}
+let dres=[];
+async function goDest(la,lo,n){const l=LS.get('recent',[]).filter(x=>x.n!==n);l.unshift({n,lat:la,lon:lo});LS.set('recent',l.slice(0,5));navDest={lat:la,lon:lo};closeDrawer();await startRoute(la,lo,n)}
+$('#dtab').onclick=openDrawer;$('#dx').onclick=closeDrawer;$('#doff').onclick=()=>{closeDrawer();openOffline()};
+$('#dq').addEventListener('keydown',e=>{if(e.key==='Enter')$('#dg').click()});
+$('#drawer').addEventListener('click',async e=>{const t=e.target.closest('button');if(!t)return;
+ if(t.id==='dg'){const q=$('#dq').value.trim();if(!q)return;const m=q.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+  if(m)return goDest(+m[1],+m[2],'Pin '+(+m[1]).toFixed(4)+', '+(+m[2]).toFixed(4));
+  $('#dr').innerHTML='<p class="dtip">Searching…</p>';
+  try{let u='https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=en&q='+encodeURIComponent(q);if(pos)u+='&viewbox='+(pos.lon-.6)+','+(pos.lat+.6)+','+(pos.lon+.6)+','+(pos.lat-.6);
+   dres=await (await fetch(u)).json();
+   $('#dr').innerHTML=dres.map((x,i)=>`<button class="di" data-r="${i}" dir="auto">${esc(x.display_name)}</button>`).join('')||'<p class="dtip">No results. Try another spelling, or type lat,lon.</p>'}
+  catch(er){$('#dr').innerHTML='<p class="dtip" style="color:#ff6b5e">Search unavailable (needs internet).</p>'}}
+ else if(t.dataset.r!=null){const x=dres[+t.dataset.r];goDest(+x.lat,+x.lon,x.display_name.split(',')[0])}
+ else if(t.dataset.c!=null){const x=LS.get('recent',[])[+t.dataset.c];if(x)goDest(x.lat,x.lon,x.n)}});
 function gmaps(lat,lon){const back=encodeURIComponent(location.href.split('#')[0]);const q=lat!=null?`daddr=${lat},${lon}&directionsmode=driving&`:'';
  let h=false;document.addEventListener('visibilitychange',()=>h=document.hidden,{once:true});
  location.href=`comgooglemaps-x-callback://?${q}x-source=Smart%20Sandero&x-success=${back}`;
@@ -432,7 +477,7 @@ async function initGL(){try{
  if(vs&&!st.layers.some(l=>l.type==='fill-extrusion'))st.layers.push({id:'b3d',type:'fill-extrusion',source:vs,'source-layer':'building',minzoom:14,paint:{'fill-extrusion-color':'#c9c6bf','fill-extrusion-height':['coalesce',['get','render_height'],6],'fill-extrusion-base':['coalesce',['get','render_min_height'],0],'fill-extrusion-opacity':.92}});
  const _src=[...document.scripts].map(x=>x.src).find(x=>/maplibre/.test(x))||'',_rtl=/unpkg/.test(_src)?'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js':'https://cdn.jsdelivr.net/npm/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js';
  try{const pr=maplibregl.setRTLTextPlugin(_rtl,true);if(pr&&pr.catch)pr.catch(()=>{})}catch(e){}
- gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:ZG,pitch:60,interactive:false,attributionControl:false,fadeDuration:0});
+ gl=new maplibregl.Map({container:'gl',style:st,center:[0,0],zoom:ZG,pitch:68,maxPitch:80,interactive:false,attributionControl:false,fadeDuration:0});
  gl.on('load',()=>{gl.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
   gl.addLayer({id:'route-c',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#0a3d91','line-width':16}});
   gl.addLayer({id:'route',type:'line',source:'route',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#1e7bff','line-width':10}});
@@ -440,7 +485,7 @@ async function initGL(){try{
 let pinP=null;
 function setPin(on){if(!gl||!glOK)return;const d=gl.getSource('dest');if(d)d.setData({type:'FeatureCollection',features:on&&pinP?[{type:'Feature',geometry:{type:'Point',coordinates:[pinP.lon,pinP.lat]}}]:[]})}
 function clearPin(){pinP=null;setPin(false);$('#pcard').style.display='none'}
-async function pickPoint(lat,lon){const me={lat,lon,n:'Pin '+lat.toFixed(4)+', '+lon.toFixed(4)};pinP=me;setPin(true);$('#ptxt').textContent=me.n;$('#pcard').style.display='flex';
+async function pickPoint(lat,lon){closeDrawer();const me={lat,lon,n:'Pin '+lat.toFixed(4)+', '+lon.toFixed(4)};pinP=me;setPin(true);$('#ptxt').textContent=me.n;$('#pcard').style.display='flex';
  try{const j=await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=17&accept-language=en&lat=${lat}&lon=${lon}`)).json();
   if(pinP===me&&j&&j.display_name){me.n=j.display_name.split(',').slice(0,2).join(',').trim();$('#ptxt').textContent=me.n}}catch(e){}}
 {let d=null;const mb=$('#mapbox');
@@ -481,7 +526,7 @@ function updGL(){const on=pos&&now()-pos.t<30000;$('#gl').style.opacity=on?1:0;i
  let th=heading;if(snapT&&heading!=null&&gspeed!=null&&gspeed>5){const a=snapT.brg,b=(a+180)%360,dd=x=>Math.abs(((x-heading)%360+540)%360-180);th=dd(a)<dd(b)?a:b}
  if(th!=null)dh=dh==null?th:dh+((((th-dh)%360)+540)%360-180)*.12;
  if(routeShown!==route){routeShown=route;gl.getSource('route').setData({type:'FeatureCollection',features:route?[{type:'Feature',geometry:{type:'LineString',coordinates:route.map(p=>[p.lon,p.lat])}}]:[]})}
- gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:60,zoom:ZG,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:Math.round($('#gl').clientWidth*.1374),right:0}})}
+ gl.jumpTo({center:[dpos.lon,dpos.lat],bearing:dh==null?0:dh,pitch:68,zoom:ZG,padding:{top:Math.round($('#gl').clientHeight*.24),bottom:0,left:Math.round($('#gl').clientWidth*.1374),right:0}})}
 // ===== offline maps (service worker keeps downloaded map files) =====
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 const TEH={lat:35.6892,lon:51.3890},MHD={lat:36.2605,lon:59.6168};
@@ -572,14 +617,15 @@ function render(){
  $('#gpsban').style.display=gOk?'none':'flex';
  {const gv=live('gear');['P','R','N','D'].forEach(l=>$('#g'+l).classList.toggle('on',gv!=null&&String(gv).toUpperCase()===l));$('#gear').textContent=gv==null?'--':String(gv).toUpperCase();$('#gear').className=gv==null?'val':'ok'}
  {const f=live('fuel');setV('#i_fuel',f);cls($('#c_fuel'),f==null?'wait':'ok')}
- const r=live('rpm');setV('#rpm',r);$('#rpmfill').style.width=r==null?0:Math.min(100,r/7000*100)+'%';
+ const r=live('rpm');$('#rpm').textContent=r==null?'--':(r/1000).toFixed(1);$('#rpm').style.color=r==null?'':'#fff';{const n=r==null?0:Math.min(14,Math.round(r/7000*14));[...$('#rseg').children].forEach((e,i)=>e.classList.toggle('on',i<n))}
  ['cool','oil','bat'].forEach(k=>{const v=live(k);setV('#i_'+k,v);cls($('#c_'+k),v==null?'wait':'ok')});
  const obd=['rpm','cool','oil','bat'].some(k=>live(k)!=null);
  ['#vbtn','#obdtile','#vstile','#obdchip'].forEach(q=>cls($(q),obd?'ok':'wait'));cls($('#smart'),'wait');$('#obdchip').textContent='OBD2: '+(obd?'connected':'not connected');
  navTick();pillUpdate();
  {const bad=glState==='fail',noTiles=glOK?(glErrs>8&&tilesGL===0):(tileFail>6&&!tileOK),t=$('#tmsg');
   t.textContent=noTiles?'Map tiles unavailable (blocked or offline)':'3D map unavailable, using basic map';t.style.display=(noTiles||bad)?'flex':'none';
-  $('#attr').textContent='v22'+(window.NATIVE?' app':'')+' · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
+  $('#attr').textContent='v24'+(window.NATIVE?' app':'')+' · map: '+(glOK?'3D':bad?'basic':'loading')+' · © OpenFreeMap © OpenStreetMap'}$('#clk').textContent=new Date().toTimeString().slice(0,5);netUpdate();if(pos&&now()-wxT>600000)loadWx();
  $('#tmp').textContent=weather&&now()-weather.at<1800000?Math.round(weather.temperature_2m)+'°C':'--'}
-setInterval(render,300);render();applyBright();loadGL();let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
+setInterval(render,300);render();applyBright();loadGL();$('#rseg').innerHTML='<i></i>'.repeat(14);[...$('#rseg').children].slice(-2).forEach(e=>e.classList.add('red'));
+let fr=0;(function lp(){if(cur==='dash'&&(fr++&1)){glOK?updGL():drawMap()}requestAnimationFrame(lp)})();
 </script></body></html>
